@@ -223,7 +223,7 @@ async def send_stats_message(guild_id, channel, *, timeout):
         else:
             rows_2.append(l)
     
-    await send_temporary_message("```Check out pjuts new website (wip): https://bit.ly/3LYqccZ```", channel, timeout=600)
+    await send_temporary_message("```Check out pjuts new website (wip):``` \n https://bit.ly/3LYqccZ", channel, timeout=600)
 
     # m = await channel.send(f"```{tabulate.tabulate(rows, header)}```")
     # await m.delete(delay=timeout)
