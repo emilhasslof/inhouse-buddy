@@ -222,12 +222,14 @@ async def send_stats_message(guild_id, channel, *, timeout):
             rows.append(l)
         else:
             rows_2.append(l)
-        
-    m = await channel.send(f"```{tabulate.tabulate(rows, header)}```")
-    await m.delete(delay=timeout)
-    if rows_2:
-        m = await channel.send(f"```{tabulate.tabulate(rows_2, header)}```")
-        await m.delete(delay=timeout)
+    
+    await send_temporary_message("```Check out pjuts new website (wip): https://bit.ly/3LYqccZ```", channel, 600)
+
+    # m = await channel.send(f"```{tabulate.tabulate(rows, header)}```")
+    # await m.delete(delay=timeout)
+    # if rows_2:
+    #     m = await channel.send(f"```{tabulate.tabulate(rows_2, header)}```")
+    #     await m.delete(delay=timeout)
 
 # Update stats in "guild_id.json", unique file for each guild
 def submit_match_result(guild_id):
