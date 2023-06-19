@@ -1,16 +1,15 @@
 import discord
+from discord import app_commands
 import asyncio
 from os import path
 import json
 import random
 import tabulate
 
-testing = False
-
-
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents=intents)
+tree = app_commands.CommandTree(client)
 
 # Holds global variables with information on ongoing matches
 # Teams currently playing: 
@@ -19,6 +18,55 @@ client = discord.Client(intents=intents)
 # Messages in control channel: 
 # (guild_id, "teams_locked_message_id"): message.id
 global_vars = {}
+
+class CreateMatchView(discord.ui.View):
+    
+    def __init__(self, radiant_channel, dire_channel):
+        self.radiant_channel = radiant_channel
+        self.dire_channel = dire_channel
+        super().__init__()
+
+    @discord.ui.button(label="Lock teams & start")
+    async def lock_and_start(self, interaction: discord.Interaction, style=discord.ButtonStyle.danger):
+        if not (len(self.radiant_channel.members) == 5 and len(self.dire_channel.members) == 5): 
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    color=discord.Color.dark_red(),
+                    title="Error",
+                    description="Please make sure both teams have 5 players"
+                ),
+                delete_after=5
+            )
+
+    
+
+# ----- Commands ----- 
+@tree.command(name="inhouse", description="Prepare an inhouse match", guild=discord.Object(id=123169301094989825))
+async def start(interaction):
+    
+    category = interaction.channel.category
+    if category:
+        radiant_channel = await category.create_voice_channel(name="Radiant")
+        dire_channel = await category.create_voice_channel(name="Dire")
+    else:
+        radiant_channel = await interaction.guild.create_voice_channel(name="Radiant")
+        dire_channel = await interaction.guild.create_voice_channel(name="Dire")
+
+    embed = discord.Embed(
+        color=discord.Color.dark_red(),
+        description="Join your team channels, then lock the teams to start the match",
+        title="Preparing match"
+    )
+        
+    embed.set_thumbnail(url="https://cdn0.iconfinder.com/data/icons/sports-elements-2/24/Swords-512.png")
+
+    await interaction.response.send_message(
+        view=CreateMatchView(radiant_channel, dire_channel),
+        embed=embed
+    )
+
+
+
 
 @client.event
 async def on_guild_join(guild):
