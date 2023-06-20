@@ -18,17 +18,30 @@ tree = app_commands.CommandTree(client)
 # Messages in control channel: 
 # (guild_id, "teams_locked_message_id"): message.id
 global_vars = {}
+testing = True
 
-class CreateMatchView(discord.ui.View):
-    
+async def get_random_teams(guild):
+    members = []
+    async for member in guild.fetch_members(limit=20):
+        members.append(member)
+    random.shuffle(members)
+    radiant = [member.name for member in members[:5]]
+    dire = [member.name for member in members[5:10]] 
+    return (radiant, dire)
+
+class Match():
     def __init__(self, radiant_channel, dire_channel):
         self.radiant_channel = radiant_channel
         self.dire_channel = dire_channel
+
+class CreateMatchView(discord.ui.View):
+    def __init__(self, match):
+        self.match = match
         super().__init__()
 
-    @discord.ui.button(label="Lock teams & start")
-    async def lock_and_start(self, interaction: discord.Interaction, style=discord.ButtonStyle.danger):
-        if not (len(self.radiant_channel.members) == 5 and len(self.dire_channel.members) == 5): 
+    @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
+    async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not testing: 
             await interaction.response.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
@@ -37,13 +50,66 @@ class CreateMatchView(discord.ui.View):
                 ),
                 delete_after=5
             )
+            return 
+        
+        if testing:
+            (self.match.radiant, self.match.dire) = await get_random_teams(interaction.guild)
+        else:
+            self.match.radiant = [member.name for member in self.match.radiant_channel.members]
+            self.match.dire = [member.name for member in self.match.dire_channel.members]
 
+        embed = discord.Embed(
+            color=discord.Color.dark_red(),
+            title="Currently playing"
+        )
+        embed.add_field(
+            name="Radiant",
+            value="\n".join(self.match.radiant)
+        )
+        embed.add_field(
+            name="Dire",
+            value="\n".join(self.match.dire)
+        )
+        embed.set_footer(text="Who won?")
+        await interaction.response.edit_message(
+            view=LockedMatchView(self.match),
+            embed=embed
+        ) 
+
+    @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
+    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.edit_message(delete_after=0.1)
+        await self.match.radiant_channel.delete()
+        await self.match.dire_channel.delete()
+        
+class LockedMatchView(discord.ui.View):
+    def __init__(self, match):
+        self.match = match
+        super().__init__() 
     
+    @discord.ui.button(label="Radiant", style=discord.ButtonStyle.success)
+    async def winner_radiant(self, interaction: discord.Interaction, button: discord.ui.Button):
+       submit_match_result(guild_id=interaction.guild, winners=self.match.radiant, losers=self.match.dire) 
+       cancel_match(interaction=interaction, match=self.match)
+
+    @discord.ui.button(label="Dire", style=discord.ButtonStyle.success)
+    async def winner_dire(self, interaction: discord.Interaction, button: discord.ui.Button):
+       submit_match_result(guild_id=interaction.guild, winners=self.match.dire, losers=self.match.radiant)
+       await cancel_match(interaction=interaction, match=self.match)
+
+    @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
+    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await cancel_match(interaction=interaction, match=self.match)
+
+
+async def cancel_match(*, interaction, match):
+    await interaction.response.edit_message(delete_after=0.1)
+    await match.radiant_channel.delete()
+    await match.dire_channel.delete()
 
 # ----- Commands ----- 
 @tree.command(name="inhouse", description="Prepare an inhouse match", guild=discord.Object(id=123169301094989825))
-async def start(interaction):
-    
+async def create_match(interaction):
     category = interaction.channel.category
     if category:
         radiant_channel = await category.create_voice_channel(name="Radiant")
@@ -52,19 +118,22 @@ async def start(interaction):
         radiant_channel = await interaction.guild.create_voice_channel(name="Radiant")
         dire_channel = await interaction.guild.create_voice_channel(name="Dire")
 
+    match = Match(radiant_channel=radiant_channel, dire_channel=dire_channel)
     embed = discord.Embed(
         color=discord.Color.dark_red(),
         description="Join your team channels, then lock the teams to start the match",
         title="Preparing match"
     )
-        
     embed.set_thumbnail(url="https://cdn0.iconfinder.com/data/icons/sports-elements-2/24/Swords-512.png")
 
     await interaction.response.send_message(
-        view=CreateMatchView(radiant_channel, dire_channel),
+        view=CreateMatchView(match),
         embed=embed
     )
 
+@tree.command(name="inhouse-stats", description="Show inhouse statistics", guild=discord.Object(id=123169301094989825))
+async def show_stats(interaction):
+    await send_stats_message(guild_id=interaction.guild, channel=interaction.channel, timeout=30)
 
 
 
@@ -271,19 +340,18 @@ async def send_stats_message(guild_id, channel, *, timeout):
         else:
             rows_2.append(l)
     
-    await send_temporary_message("```Check out pjuts new website (wip):``` \n https://bit.ly/3LYqccZ", channel, timeout=600)
 
-    # m = await channel.send(f"```{tabulate.tabulate(rows, header)}```")
-    # await m.delete(delay=timeout)
-    # if rows_2:
-    #     m = await channel.send(f"```{tabulate.tabulate(rows_2, header)}```")
-    #     await m.delete(delay=timeout)
+    m = await channel.send(f"```{tabulate.tabulate(rows, header)}```")
+    await m.delete(delay=timeout)
+    if rows_2:
+        m = await channel.send(f"```{tabulate.tabulate(rows_2, header)}```")
+        await m.delete(delay=timeout)
 
 # Update stats in "guild_id.json", unique file for each guild
-def submit_match_result(guild_id):
+def submit_match_result(*, guild_id, winners, losers):
     # I this is the first match in this guild, create a fresh json instead
     if not path.exists(f"{guild_id}.json"):
-        create_match_result(guild_id)
+        create_match_result(guild_id=guild_id, winners=winners, losers=losers)
         return
     
     # load stats from json
@@ -292,21 +360,6 @@ def submit_match_result(guild_id):
         stats_json = "\n".join(file.readlines())
     stats = json.loads(stats_json)
 
-    # determine winners and losers
-    winner = global_vars.pop((guild_id, "winner"))
-    team_radiant = global_vars.pop((guild_id, "radiant"))
-    team_dire = global_vars.pop((guild_id, "dire"))
-    winners = []
-    losers = []
-    if winner == "radiant":
-        winners = team_radiant
-        losers = team_dire
-    elif winner == "dire":
-        winners = team_dire
-        losers = team_radiant
-    else:
-        raise Exception("No winner found")
-    
     # Update stats
     for player in winners:
         if player not in stats: 
@@ -344,15 +397,8 @@ def submit_match_result(guild_id):
 
 
 # Create the initial json file if this is the first match played in this guild
-def create_match_result(guild_id):
-    winner = global_vars.pop((guild_id, "winner"))
+def create_match_result(*, guild_id, winners, losers):
     stats = {}
-    if winner == "radiant":
-        winners = global_vars.pop((guild_id, "radiant"))
-        losers = global_vars.pop((guild_id, "dire"))
-    elif winner == "dire":
-        winners = global_vars.pop((guild_id, "dire"))
-        losers = global_vars.pop((guild_id, "radiant"))
 
     for player in winners:
         stats[player] = {
