@@ -13,20 +13,25 @@ tree = app_commands.CommandTree(client)
 
 testing = True 
 
-# For testing purposes
-async def get_random_teams(guild):
-    members = []
-    async for member in guild.fetch_members(limit=20):
-        members.append(member)
-    random.shuffle(members)
-    radiant = [member.name for member in members[:5]]
-    dire = [member.name for member in members[5:10]] 
-    return (radiant, dire)
 
 class Match():
     def __init__(self, radiant_channel, dire_channel):
         self.radiant_channel = radiant_channel
         self.dire_channel = dire_channel
+        self.radiant = []
+        self.dire = []
+        self.winners = []
+        self.losers = []
+
+    def can_edit(self, interaction):
+        role = discord.utils.get(interaction.guild.roles, name="Inhouse Manager")
+        inhouse_managers = [member.name for member in role.members]
+        return interaction.user.name in self.radiant + self.dire + inhouse_managers or interaction.user.guild_permissions.administrator
+    
+    async def cancel(self, interaction):
+        await interaction.response.edit_message(delete_after=0.1)
+        await self.dire_channel.delete()
+        await self.radiant_channel.delete()
 
 class CreateMatchView(discord.ui.View):
     def __init__(self, match):
@@ -35,7 +40,6 @@ class CreateMatchView(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-        print(", ".join([p.name for p in self.match.radiant_channel.members]))
         if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not testing: 
             await interaction.response.send_message(
                 embed=discord.Embed(
@@ -61,7 +65,7 @@ class CreateMatchView(discord.ui.View):
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await cancel_match(interaction=interaction, match=self.match)        
+        await self.match.cancel(interaction)
         
 class LockedMatchView(discord.ui.View):
     def __init__(self, match):
@@ -70,29 +74,41 @@ class LockedMatchView(discord.ui.View):
     
     @discord.ui.button(label="Radiant", style=discord.ButtonStyle.success)
     async def winner_radiant(self, interaction: discord.Interaction, button: discord.ui.Button):
-        self.match.winners=self.match.radiant
-        self.match.losers=self.match.dire
-        embed = interaction.message.embeds[0]
-        embed.set_footer(text="This will update stats, please confirm")
-        await interaction.response.edit_message(
-            embed=embed,
-            view=ConfirmView(self.match)
-        )
+        if self.match.can_edit(interaction):
+            self.match.winners=self.match.radiant
+            self.match.losers=self.match.dire
+            embed = interaction.message.embeds[0]
+            embed.set_footer(text="This will update stats, please confirm")
+            await interaction.response.edit_message(
+                embed=embed,
+                view=ConfirmView(self.match)
+            )
+        else:
+            await interaction.response.send_message(f"{interaction.user.name} is not allowed to do this", delete_after=5)
 
     @discord.ui.button(label="Dire", style=discord.ButtonStyle.success)
     async def winner_dire(self, interaction: discord.Interaction, button: discord.ui.Button):
-        self.match.winners=self.match.dire
-        self.match.losers=self.match.radiant
-        embed = interaction.message.embeds[0]
-        embed.set_footer(text="This will update stats, please confirm")
-        await interaction.response.edit_message(
-            embed=embed,
-            view=ConfirmView(self.match)
-        )
+        if self.match.can_edit(interaction):
+            self.match.winners=self.match.dire
+            self.match.losers=self.match.radiant
+            embed = interaction.message.embeds[0]
+            embed.set_footer(text="This will update stats, please confirm")
+            await interaction.response.edit_message(
+                embed=embed,
+                view=ConfirmView(self.match)
+            )
+        else:
+            await interaction.response.send_message(f"{interaction.user.name} is not allowed to do this", delete_after=5)
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await cancel_match(interaction=interaction, match=self.match)
+        if self.match.can_edit(interaction):
+            await interaction.response.edit_message(
+                embed=interaction.message.embeds[0].set_footer(text="This will cancel the match, please confirm"),
+                view=ConfirmCancelView(self.match)
+            )
+        else:
+            await interaction.response.send_message(f"{interaction.user.name} is not allowed to do this", delete_after=5)
 
 class ConfirmView(discord.ui.View):
     def __init__(self, match):
@@ -120,13 +136,22 @@ class ConfirmView(discord.ui.View):
            embed=interaction.message.embeds[0].set_footer(text="Who won?"),
            view=LockedMatchView(self.match)
        ) 
-    
-    
 
-async def cancel_match(*, interaction, match):
-    await interaction.response.edit_message(delete_after=0.1)
-    await match.radiant_channel.delete()
-    await match.dire_channel.delete()
+class ConfirmCancelView(discord.ui.View):
+    def __init__(self, match):
+        self.match=match
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.success)
+    async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self.match.cancel(interaction)
+    
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.danger)
+    async def cancel(self, interaction:discord.Interaction, button: discord.ui.Button):
+        await interaction.response.edit_message(
+            embed=interaction.message.embeds[0].set_footer(text="Who won?"),
+            view=LockedMatchView(self.match)
+        )
 
 
 # ----- Commands ----- 
@@ -221,6 +246,16 @@ def submit_match_result(*, guild_id, winners, losers):
     stats_json = json.dumps(stats, indent=4)
     with open(f"{guild_id}.json", "w") as file:
         file.writelines(stats_json)
+
+# For testing purposes
+async def get_random_teams(guild):
+    members = []
+    async for member in guild.fetch_members(limit=20):
+        members.append(member)
+    random.shuffle(members)
+    radiant = [member.name for member in members[:5]]
+    dire = [member.name for member in members[5:10]] 
+    return (radiant, dire)
 
 @client.event
 async def on_ready():
