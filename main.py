@@ -11,7 +11,7 @@ intents.members = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-testing = True
+testing = True 
 
 # For testing purposes
 async def get_random_teams(guild):
@@ -31,7 +31,7 @@ class Match():
 class CreateMatchView(discord.ui.View):
     def __init__(self, match):
         self.match = match
-        super().__init__()
+        super().__init__(timeout=None)
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -66,7 +66,7 @@ class CreateMatchView(discord.ui.View):
 class LockedMatchView(discord.ui.View):
     def __init__(self, match):
         self.match = match
-        super().__init__() 
+        super().__init__(timeout=None) 
     
     @discord.ui.button(label="Radiant", style=discord.ButtonStyle.success)
     async def winner_radiant(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -97,7 +97,7 @@ class LockedMatchView(discord.ui.View):
 class ConfirmView(discord.ui.View):
     def __init__(self, match):
         self.match=match
-        super().__init__()
+        super().__init__(timeout=None)
 
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.success)
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
