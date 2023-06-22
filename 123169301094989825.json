@@ -1,130 +1,154 @@
 {
-    "tf": {
-        "wins": 3,
-        "losses": 1,
-        "matches": 4,
-        "winrate": 0.75,
-        "points": 2,
-        "rank": 2
-    },
-    "Jaegrym": {
+    "__hackerman": {
         "wins": 5,
-        "losses": 2,
-        "matches": 7,
-        "winrate": 0.714,
-        "points": 3,
+        "losses": 0,
+        "matches": 5,
+        "winrate": 1.0,
+        "points": 5,
         "rank": 1
     },
-    "Knut": {
-        "wins": 2,
-        "losses": 0,
-        "matches": 2,
-        "winrate": 1.0,
-        "points": 2,
-        "rank": 2
-    },
-    "__hackerman": {
-        "wins": 2,
-        "losses": 0,
-        "matches": 2,
-        "winrate": 1.0,
-        "points": 2,
-        "rank": 2
-    },
-    "Ackebengan": {
+    "tf": {
         "wins": 1,
-        "losses": 3,
-        "matches": 4,
-        "winrate": 0.25,
-        "points": -2,
-        "rank": 15
-    },
-    "korvmebr\u00f6": {
-        "wins": 0,
-        "losses": 1,
-        "matches": 1,
-        "winrate": 0.0,
-        "points": -1,
-        "rank": 9
-    },
-    "benkebonk": {
-        "wins": 1,
-        "losses": 2,
-        "matches": 3,
-        "winrate": 0.333,
-        "points": -1,
-        "rank": 9
-    },
-    "dumklang": {
-        "wins": 1,
-        "losses": 2,
-        "matches": 3,
-        "winrate": 0.333,
-        "points": -1,
-        "rank": 9
-    },
-    "vinnesson": {
-        "wins": 0,
-        "losses": 3,
-        "matches": 3,
-        "winrate": 0.0,
+        "losses": 4,
+        "matches": 5,
+        "winrate": 0.2,
         "points": -3,
         "rank": 16
     },
-    "harveyspecter": {
-        "wins": 1,
-        "losses": 1,
-        "matches": 2,
-        "winrate": 0.5,
-        "points": 0,
-        "rank": 6
-    },
-    "holk": {
-        "wins": 1,
-        "losses": 1,
-        "matches": 2,
-        "winrate": 0.5,
-        "points": 0,
-        "rank": 6
-    },
-    "Chis": {
-        "wins": 2,
-        "losses": 0,
-        "matches": 2,
-        "winrate": 1.0,
+    "vinnesson": {
+        "wins": 5,
+        "losses": 3,
+        "matches": 8,
+        "winrate": 0.625,
         "points": 2,
-        "rank": 2
+        "rank": 3
     },
     "Croneee": {
-        "wins": 0,
-        "losses": 1,
-        "matches": 1,
-        "winrate": 0.0,
+        "wins": 2,
+        "losses": 3,
+        "matches": 5,
+        "winrate": 0.4,
         "points": -1,
-        "rank": 9
+        "rank": 13
     },
-    "Prince": {
-        "wins": 1,
-        "losses": 1,
-        "matches": 2,
-        "winrate": 0.5,
-        "points": 0,
+    "youlikemynukes": {
+        "wins": 4,
+        "losses": 3,
+        "matches": 7,
+        "winrate": 0.571,
+        "points": 1,
+        "rank": 6
+    },
+    "harveyspecter": {
+        "wins": 4,
+        "losses": 6,
+        "matches": 10,
+        "winrate": 0.4,
+        "points": -2,
+        "rank": 14
+    },
+    "Jaegrym": {
+        "wins": 8,
+        "losses": 4,
+        "matches": 12,
+        "winrate": 0.667,
+        "points": 4,
+        "rank": 2
+    },
+    "korvmebr\u00f6": {
+        "wins": 5,
+        "losses": 4,
+        "matches": 9,
+        "winrate": 0.556,
+        "points": 1,
         "rank": 6
     },
     "Boll3n": {
-        "wins": 0,
-        "losses": 1,
-        "matches": 1,
-        "winrate": 0.0,
-        "points": -1,
-        "rank": 9
+        "wins": 3,
+        "losses": 3,
+        "matches": 6,
+        "winrate": 0.5,
+        "points": 0,
+        "rank": 11
+    },
+    "holk": {
+        "wins": 4,
+        "losses": 3,
+        "matches": 7,
+        "winrate": 0.571,
+        "points": 1,
+        "rank": 6
+    },
+    "Chis": {
+        "wins": 4,
+        "losses": 3,
+        "matches": 7,
+        "winrate": 0.571,
+        "points": 1,
+        "rank": 6
+    },
+    "Jackedonken": {
+        "wins": 4,
+        "losses": 3,
+        "matches": 7,
+        "winrate": 0.571,
+        "points": 1,
+        "rank": 6
     },
     "moogi": {
+        "wins": 4,
+        "losses": 2,
+        "matches": 6,
+        "winrate": 0.667,
+        "points": 2,
+        "rank": 3
+    },
+    "Prince": {
+        "wins": 4,
+        "losses": 2,
+        "matches": 6,
+        "winrate": 0.667,
+        "points": 2,
+        "rank": 3
+    },
+    "Knut": {
+        "wins": 1,
+        "losses": 4,
+        "matches": 5,
+        "winrate": 0.2,
+        "points": -3,
+        "rank": 16
+    },
+    "Ackebengan": {
+        "wins": 3,
+        "losses": 7,
+        "matches": 10,
+        "winrate": 0.3,
+        "points": -4,
+        "rank": 18
+    },
+    "benkebonk": {
+        "wins": 2,
+        "losses": 2,
+        "matches": 4,
+        "winrate": 0.5,
+        "points": 0,
+        "rank": 11
+    },
+    "M\u00e5ns": {
+        "wins": 2,
+        "losses": 4,
+        "matches": 6,
+        "winrate": 0.333,
+        "points": -2,
+        "rank": 14
+    },
+    "dumklang": {
         "wins": 0,
-        "losses": 1,
-        "matches": 1,
+        "losses": 5,
+        "matches": 5,
         "winrate": 0.0,
-        "points": -1,
-        "rank": 9
+        "points": -5,
+        "rank": 19
     }
 }
