@@ -1,0 +1,4 @@
+  File "/home/emil/inhouse-buddy/main.py", line 56
+    description=f"Please make sure both teams have 5 players. Currently 
+                ^
+SyntaxError: unterminated string literal (detected at line 56)

@@ -1,3 +1,4 @@
+from datetime import datetime
 import discord
 from discord import app_commands
 import asyncio
@@ -5,9 +6,11 @@ from os import path
 import json
 import random
 import tabulate
+import sqlite3
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
@@ -18,10 +21,7 @@ class Match():
     def __init__(self, radiant_channel, dire_channel):
         self.radiant_channel = radiant_channel
         self.dire_channel = dire_channel
-        self.radiant = []
-        self.dire = []
-        self.winners = []
-        self.losers = []
+        self.radiant, self.dire, self.winners, self.losers = [], [], [], []
 
     def can_edit(self, interaction):
         role = discord.utils.get(interaction.guild.roles, name="Inhouse Manager")
@@ -153,10 +153,120 @@ class ConfirmCancelView(discord.ui.View):
             view=LockedMatchView(self.match)
         )
 
+class ScheduledMatchView(discord.ui.View):
+    def __init__(self, *, datetime: datetime, players: list, guild_id: int):
+        self.datetime = datetime
+        self.players = players
+        self.conn = sqlite3.connect(f"./databases/{guild_id}.db")
+        self.c = self.conn.cursor()
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="Sign Up", style=discord.ButtonStyle.success)
+    async def sign_up(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if interaction.user.name in self.players: return
+        try:
+            print(f"INSERTING ---- datetime: {str(datetime)}" + f"player: {interaction.user.name}")
+            # this doesn't work for some reason
+            self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (str(datetime), interaction.user.name))
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+
+        self.players.append(interaction.user.name)
+        await interaction.response.edit_message(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title=f"Match scheduled for {self.datetime}",
+                description="Players: \n " + "\n ".join(self.players) 
+            ),
+            view=self
+        )
+
+    @discord.ui.button(label="Sign Down", style=discord.ButtonStyle.danger)
+    async def sign_down(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if interaction.user.name not in self.players: return
+        self.c.execute(f"DELETE FROM match_player_signups WHERE datetime = ? AND player = ?", (str(datetime), interaction.user.name))
+        self.conn.commit()
+        self.players.remove(interaction.user.name)
+        await interaction.response.edit_message(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title=f"Match scheduled for {self.datetime}",
+                description="Players: \n " + "\n ".join(self.players) 
+            ),
+            view=self
+        )
+
 
 # ----- Commands ----- 
+
+@tree.command(name="schedule", description=
+              """View or join scheduled matches. 
+                date: YYYY-MM-DD time: HH:MM => Schedule new match""",
+                guild=discord.Object(id=123169301094989825))
+async def schedule_match(interaction, date: str = "", time: str = ""):
+
+    conn = sqlite3.connect(f"./databases/{interaction.guild_id}.db")
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS scheduled_matches (datetime TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS match_player_signups (datetime TEXT, player TEXT)")
+
+    channel = interaction.channel
+
+    if (date is not "") ^ (time is not ""):  # XOR
+        await interaction.response.send_message(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title="Error",
+                description="Please specify both date and time"
+            ),
+            delete_after=30,
+            ephemeral=True
+        )
+        return
+    elif date and time:
+        try:
+            match_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
+        except ValueError:
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    color=discord.Color.dark_red(),
+                    title="Error",
+                    description="Invalid date or time format"
+                ),
+                delete_after=30,
+                ephemeral=True
+            )
+            return
+
+        c.execute(f"INSERT INTO scheduled_matches VALUES (?)", (match_datetime.strftime("%Y-%m-%d %H:%M"),))
+        conn.commit()
+    
+
+    c.execute("SELECT * FROM scheduled_matches")
+    scheduled_matches_datetimes = [match[0] for match in c.fetchall()]
+    scheduled_matches = [{}]
+    for datetime in scheduled_matches_datetimes:
+        c.execute("SELECT * FROM match_player_signups WHERE datetime = ?", (datetime,))
+        fetched = c.fetchall()
+        print(f"fetched: {fetched}")
+        players = [player[1] for player in fetched]
+        print(f"players1: {players}")
+        players0 = [player[0] for player in fetched]
+        print(f"players0: {players0}")
+        scheduled_matches.append({datetime: players})
+        await channel.send(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title=f"Match scheduled for {datetime}",
+                description="Players: \n " + "\n ".join(players) 
+            ),
+            view=ScheduledMatchView(datetime=datetime, players=players, guild_id=interaction.guild_id)
+        )
+    return
+
 @tree.command(name="inhouse", description="Prepare an inhouse match", guild=discord.Object(id=123169301094989825))
-async def create_match(interaction):
+async def create_match(interaction: discord.Interaction):
     category = interaction.channel.category
     if category:
         radiant_channel = await category.create_voice_channel(name="Radiant")
@@ -261,6 +371,7 @@ async def get_random_teams(guild):
 async def on_ready():
     print(f"We have logged in as {client.user}")
     await tree.sync(guild=discord.Object(id=123169301094989825))
+    print("Synced commands")
 
 with open("token.txt", "r") as file: 
     token = file.read()
