@@ -160,15 +160,17 @@ class ScheduledMatchView(discord.ui.View):
         self.conn = sqlite3.connect(f"./databases/{guild_id}.db")
         self.c = self.conn.cursor()
         super().__init__(timeout=None)
+        print(f"initialized view, datetime: {datetime}")
     
     @discord.ui.button(label="Sign Up", style=discord.ButtonStyle.success)
     async def sign_up(self, interaction: discord.Interaction, button: discord.ui.Button):
         if interaction.user.name in self.players: return
         try:
-            print(f"INSERTING ---- datetime: {str(datetime)}" + f"player: {interaction.user.name}")
-            # this doesn't work for some reason
-            self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (str(datetime), interaction.user.name))
+            print(f"INSERTING ---- datetime: {self.datetime}" + f"player: {interaction.user.name}")
+            self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (self.datetime, interaction.user.name))
             self.conn.commit()
+            players_in_database = self.c.execute(f"SELECT * FROM match_player_signups WHERE datetime = ?", (self.datetime,)).fetchall()
+            print(f"players_in_database: {players_in_database}")
         except Exception as e:
             print(e)
 
@@ -177,7 +179,7 @@ class ScheduledMatchView(discord.ui.View):
             embed=discord.Embed(
                 color=discord.Color.dark_red(),
                 title=f"Match scheduled for {self.datetime}",
-                description="Players: \n " + "\n ".join(self.players) 
+                description="Players: \n " + "\n ".join(self.players)
             ),
             view=self
         )
@@ -185,7 +187,7 @@ class ScheduledMatchView(discord.ui.View):
     @discord.ui.button(label="Sign Down", style=discord.ButtonStyle.danger)
     async def sign_down(self, interaction: discord.Interaction, button: discord.ui.Button):
         if interaction.user.name not in self.players: return
-        self.c.execute(f"DELETE FROM match_player_signups WHERE datetime = ? AND player = ?", (str(datetime), interaction.user.name))
+        self.c.execute(f"DELETE FROM match_player_signups WHERE datetime = ? AND player = ?", (self.datetime, interaction.user.name))
         self.conn.commit()
         self.players.remove(interaction.user.name)
         await interaction.response.edit_message(
@@ -210,10 +212,11 @@ async def schedule_match(interaction, date: str = "", time: str = ""):
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS scheduled_matches (datetime TEXT)")
     c.execute("CREATE TABLE IF NOT EXISTS match_player_signups (datetime TEXT, player TEXT)")
+    conn.commit()
 
     channel = interaction.channel
 
-    if (date is not "") ^ (time is not ""):  # XOR
+    if (date != "") ^ (time != ""):  # XOR
         await interaction.response.send_message(
             embed=discord.Embed(
                 color=discord.Color.dark_red(),
@@ -246,7 +249,7 @@ async def schedule_match(interaction, date: str = "", time: str = ""):
     c.execute("SELECT * FROM scheduled_matches")
     scheduled_matches_datetimes = [match[0] for match in c.fetchall()]
     scheduled_matches = [{}]
-    for datetime in scheduled_matches_datetimes:
+    for idx, datetime in enumerate(scheduled_matches_datetimes):
         c.execute("SELECT * FROM match_player_signups WHERE datetime = ?", (datetime,))
         fetched = c.fetchall()
         print(f"fetched: {fetched}")
@@ -255,14 +258,15 @@ async def schedule_match(interaction, date: str = "", time: str = ""):
         players0 = [player[0] for player in fetched]
         print(f"players0: {players0}")
         scheduled_matches.append({datetime: players})
-        await channel.send(
-            embed=discord.Embed(
-                color=discord.Color.dark_red(),
-                title=f"Match scheduled for {datetime}",
-                description="Players: \n " + "\n ".join(players) 
-            ),
-            view=ScheduledMatchView(datetime=datetime, players=players, guild_id=interaction.guild_id)
-        )
+        embed=discord.Embed(
+            color=discord.Color.dark_red(),
+            title=f"Match scheduled for {datetime}",
+            description="Players: \n " + "\n ".join(players))
+        view=ScheduledMatchView(datetime=datetime, players=players, guild_id=interaction.guild_id)
+        if idx == 0:
+            await interaction.response.send_message(embed=embed, view=view)
+        else:
+            await channel.send(embed=embed, view=view) 
     return
 
 @tree.command(name="inhouse", description="Prepare an inhouse match", guild=discord.Object(id=123169301094989825))
