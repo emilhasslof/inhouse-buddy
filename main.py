@@ -13,6 +13,10 @@ intents.members = True
 intents.message_content = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+snuslan=discord.Object(id=123169301094989825)
+wew=discord.Object(id=745215730592645221)
+list_of_guilds = [snuslan, wew]
+print(f"list_of_guilds: {list_of_guilds}")
 
 testing = True 
 
@@ -164,7 +168,16 @@ class ScheduledMatchView(discord.ui.View):
     
     @discord.ui.button(label="Sign Up", style=discord.ButtonStyle.success)
     async def sign_up(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.name in self.players: return
+        if interaction.user.name in self.players: 
+            interaction.response.send_message(
+                embed=discord.Embed(
+                    color=discord.Color.dark_red(),
+                    title="Error",
+                    description="You are already signed up"
+                ),
+                delete_after=30,
+                ephemeral=True
+            )
         try:
             print(f"INSERTING ---- datetime: {self.datetime}" + f"player: {interaction.user.name}")
             self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (self.datetime, interaction.user.name))
@@ -186,7 +199,18 @@ class ScheduledMatchView(discord.ui.View):
 
     @discord.ui.button(label="Sign Down", style=discord.ButtonStyle.danger)
     async def sign_down(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.name not in self.players: return
+        if interaction.user.name not in self.players:
+            interaction.response.send_message(
+                embed=discord.Embed(
+                    color=discord.Color.dark_red(),
+                    title="Error",
+                    description="You are not signed up"
+                ),
+                delete_after=30,
+                ephemeral=True
+            )
+            return 
+
         self.c.execute(f"DELETE FROM match_player_signups WHERE datetime = ? AND player = ?", (self.datetime, interaction.user.name))
         self.conn.commit()
         self.players.remove(interaction.user.name)
@@ -202,10 +226,9 @@ class ScheduledMatchView(discord.ui.View):
 
 # ----- Commands ----- 
 
-@tree.command(name="schedule", description=
-              """View or join scheduled matches. 
-                date: YYYY-MM-DD time: HH:MM => Schedule new match""",
-                guild=discord.Object(id=123169301094989825))
+@tree.command(name="schedule", 
+              description="""View or join scheduled matches. date: YYYY-MM-DD time: HH:MM => Schedule new match""",
+              guild=snuslan)
 async def schedule_match(interaction, date: str = "", time: str = ""):
 
     conn = sqlite3.connect(f"./databases/{interaction.guild_id}.db")
@@ -269,7 +292,7 @@ async def schedule_match(interaction, date: str = "", time: str = ""):
             await channel.send(embed=embed, view=view) 
     return
 
-@tree.command(name="inhouse", description="Prepare an inhouse match", guild=discord.Object(id=123169301094989825))
+@tree.command(name="inhouse", description="Prepare an inhouse match", guild=snuslan)
 async def create_match(interaction: discord.Interaction):
     category = interaction.channel.category
     if category:
@@ -292,7 +315,7 @@ async def create_match(interaction: discord.Interaction):
         embed=embed
     )
 
-@tree.command(name="inhouse-stats", description="Show inhouse statistics", guild=discord.Object(id=123169301094989825))
+@tree.command(name="inhouse-stats", description="Show inhouse statistics", guild=snuslan)
 async def show_stats(interaction):
     await send_stats_message(interaction, timeout=60)
 
@@ -374,8 +397,10 @@ async def get_random_teams(guild):
 @client.event
 async def on_ready():
     print(f"We have logged in as {client.user}")
-    await tree.sync(guild=discord.Object(id=123169301094989825))
+    await tree.sync(guild=list_of_guilds[0])
+    await tree.sync(guild=list_of_guilds[1])
     print("Synced commands")
+
 
 with open("token.txt", "r") as file: 
     token = file.read()
