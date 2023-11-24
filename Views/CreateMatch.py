@@ -1,5 +1,7 @@
 import discord
 from discord import app_commands
+import random
+from Views.LockedMatch import LockedMatch
 
 class CreateMatch(discord.ui.View):
     def __init__(self, *, match, testing=False):
@@ -9,7 +11,7 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not testing: 
+        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
             await interaction.response.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
@@ -30,9 +32,18 @@ class CreateMatch(discord.ui.View):
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
-        await interaction.response.edit_message( view=LockedMatchView(self.match), embed=embed) 
+        await interaction.response.edit_message( view=LockedMatch(self.match), embed=embed) 
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         await self.match.cancel(interaction)
         
+# For testing purposes
+async def get_random_teams(guild):
+    members = []
+    async for member in guild.fetch_members(limit=20):
+        members.append(member)
+    random.shuffle(members)
+    radiant = [member.name for member in members[:5]]
+    dire = [member.name for member in members[5:10]] 
+    return (radiant, dire)

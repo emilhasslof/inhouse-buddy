@@ -5,11 +5,12 @@ from datetime import datetime
 
 
 class ScheduledMatch(discord.ui.View):
-    def __init__(self, *, datetime: datetime, players: list, guild_id: int):
+    def __init__(self, *, datetime: datetime, players: list, guild_id: int, 
+                 conn: sqlite3.Connection, c: sqlite3.Cursor):
         self.datetime = datetime
         self.players = players
-        self.conn = sqlite3.connect(f"./databases/{guild_id}.db")
-        self.c = self.conn.cursor()
+        self.conn = conn 
+        self.c = c
         super().__init__(timeout=None)
         print(f"initialized view, datetime: {datetime}")
     
@@ -25,8 +26,9 @@ class ScheduledMatch(discord.ui.View):
                 delete_after=30,
                 ephemeral=True
             )
+            return
         try:
-            print(f"INSERTING ---- datetime: {self.datetime}" + f"player: {interaction.user.name}")
+            print(f"INSERTING ---- datetime: {self.datetime}" + f" player: {interaction.user.name}")
             self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (self.datetime, interaction.user.name))
             self.conn.commit()
             players_in_database = self.c.execute(f"SELECT * FROM match_player_signups WHERE datetime = ?", (self.datetime,)).fetchall()
