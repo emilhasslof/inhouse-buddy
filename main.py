@@ -25,16 +25,16 @@ async def on_ready():
     print("Synced commands")
 
 
-@tree.command(guild=snuslan, name="schedule",
+@tree.command(guilds=list_of_guilds, name="schedule",
     description="""View or join scheduled matches. date: YYYY-MM-DD time: HH:MM => Schedule new match""")
 async def schedule(interaction, date: str = "", time: str = ""):
     await schedule_command(interaction, date, time)
 
-@tree.command(guild=snuslan, name="inhouse", description="Prepare an inhouse match" )
+@tree.command(guilds=list_of_guilds, name="inhouse", description="Prepare an inhouse match" )
 async def inhouse(interaction):
     await inhouse_command(interaction, testing)
 
-@tree.command(guild=snuslan, name="inhouse-stats", description="Show inhouse statistics")
+@tree.command(guilds=list_of_guilds, name="inhouse-stats", description="Show inhouse statistics")
 async def stats(interaction):
     await stats_command(interaction, timeout=60)
 

@@ -1,6 +1,7 @@
 import discord
 import sqlite3
 from Views.ScheduledMatch import ScheduledMatch
+from datetime import datetime
 
 
 async def schedule_command(interaction, date: str = "", time: str = ""):
@@ -21,7 +22,6 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
     """) 
     conn.commit()
     channel = interaction.channel
-    match_datetime = None
 
     # Checking for command arguments
     if (date != "") ^ (time != ""):  # XOR
@@ -54,22 +54,27 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
 
     c.execute("SELECT * FROM scheduled_matches")
     scheduled_matches_datetimes = [match[0] for match in c.fetchall()]
-    for idx, datetime in enumerate(scheduled_matches_datetimes):
-        c.execute("SELECT * FROM match_player_signups WHERE datetime = ?", (datetime,))
-        fetched = c.fetchall()
-
-        # debugging
-        print(f"fetched: {fetched}")
-        matches = [match[0] for match in fetched]
-        print(f"matches: {matches}")
-        players = [match[1] for match in fetched]
-        print(f"players1: {players}")
+    print(f"scheduled_matches_datetimes: {scheduled_matches_datetimes}")
+    if len(scheduled_matches_datetimes) == 0:
+        await interaction.response.send_message(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title="No upcoming matches",
+                description="Schedule a match with /schedule YYYY-MM-DD HH:MM"
+            ),
+            delete_after=30,
+            ephemeral=True
+        )
+        return
+    for idx, datetime_string in enumerate(scheduled_matches_datetimes):
+        players = c.execute("SELECT player FROM match_player_signups WHERE datetime = ?", (datetime_string,)).fetchall()
+        players = [player[0] for player in players] # unpack tuples
 
         embed=discord.Embed(
             color=discord.Color.dark_red(),
-            title=f"Match scheduled for {datetime}",
+            title=f"Match scheduled for {datetime_string}",
             description="Players: \n " + "\n ".join(players))
-        view=ScheduledMatch(datetime=datetime, players=players, guild_id=interaction.guild_id
+        view=ScheduledMatch(datetime_string=datetime_string, players=players, guild_id=interaction.guild_id
                             , conn=conn, c=c)
         if idx == 0:
             await interaction.response.send_message(embed=embed, view=view, delete_after=600)
