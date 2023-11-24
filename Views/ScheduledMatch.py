@@ -1,21 +1,19 @@
 
 import discord
 import sqlite3
-
+from DatabaseHandler import DatabaseHandler
 
 class ScheduledMatch(discord.ui.View):
     def __init__(self, *, datetime_string: str, players: list, guild_id: int, 
-                 conn: sqlite3.Connection, c: sqlite3.Cursor):
+        db_handler: DatabaseHandler):
         self.datetime_string = datetime_string
         self.players = players
-        self.conn = conn 
-        self.c = c
+        self.db_handler=db_handler
         super().__init__(timeout=None)
-        print(f"initialized view, datetime: {datetime_string}")
     
     @discord.ui.button(label="Sign Up", style=discord.ButtonStyle.success)
     async def sign_up(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.name in self.players: 
+        if interaction.user.name in self.players: #already signed up
             await interaction.response.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
@@ -26,18 +24,9 @@ class ScheduledMatch(discord.ui.View):
                 ephemeral=True
             )
             return
-        try:
-            print(f"INSERTING ---- datetime: {self.datetime_string}" + f" player: {interaction.user.name}")
-            self.c.execute(f"INSERT INTO match_player_signups VALUES (?, ?)", (self.datetime_string, interaction.user.name))
-            self.conn.commit()
-            players_in_database = self.c.execute(
-                f"SELECT * FROM match_player_signups WHERE datetime = ?", (self.datetime_string,)
-            ).fetchall()
-            print(f"players_in_database: {players_in_database}")
-        except Exception as e:
-            print(e)
 
-        self.players.append(interaction.user.name)
+        self.players = self.db_handler.sign_up(self.datetime_string, interaction.user.name)
+
         await interaction.response.edit_message(
             embed=discord.Embed(
                 color=discord.Color.dark_red(),
@@ -49,7 +38,7 @@ class ScheduledMatch(discord.ui.View):
 
     @discord.ui.button(label="Sign Down", style=discord.ButtonStyle.danger)
     async def sign_down(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.name not in self.players:
+        if interaction.user.name not in self.players: #not signed up
             await interaction.response.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
@@ -61,9 +50,8 @@ class ScheduledMatch(discord.ui.View):
             )
             return 
 
-        self.c.execute(f"DELETE FROM match_player_signups WHERE datetime = ? AND player = ?", (self.datetime_string, interaction.user.name))
-        self.conn.commit()
-        self.players.remove(interaction.user.name)
+        self.players = self.db_handler.sign_down(self.datetime_string, interaction.user.name)
+
         await interaction.response.edit_message(
             embed=discord.Embed(
                 color=discord.Color.dark_red(),
