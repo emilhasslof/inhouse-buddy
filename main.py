@@ -4,6 +4,7 @@ from os import path
 from Commands.stats import stats_command
 from Commands.inhouse import inhouse_command
 from Commands.schedule import schedule_command
+from Commands.inhouse_enjoyer import inhouse_enjoyer_command
 
 
 if __name__ == "__main__":
@@ -25,7 +26,6 @@ if __name__ == "__main__":
         await tree.sync(guild=snuslan)
         await tree.sync(guild=wew)
         print("Synced commands")
-
 
     @tree.command(guilds=list_of_guilds, name="schedule",
         description="""View or join scheduled matches. date: YYYY-MM-DD time: HH:MM => Schedule new match""")

@@ -13,8 +13,6 @@ class ScheduledMatch(discord.ui.View):
         self.queue = db_handler.get_queue(datetime_string)
         super().__init__(timeout=None)
 
-        #testing
-        print(f"ScheduledMatch created. Players: {self.players}, Time: {self.datetime_string}")
     
     @discord.ui.button(label="Sign Up", style=discord.ButtonStyle.success)
     async def sign_up(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -40,7 +38,7 @@ class ScheduledMatch(discord.ui.View):
 
         if self.players == 10:
             await interaction.channel.send("""
-                @inhousers It's on! Match scheduled for {self.datetime_string} is now full! 
+                <@&{inhouse_enjoyer.id}> It's on! Match scheduled for {self.datetime_string} is now full.
                 Further signups will be added to the queue.
                                            """)
 

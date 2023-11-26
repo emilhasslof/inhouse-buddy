@@ -23,12 +23,26 @@ class CreateMatch(discord.ui.View):
                 delete_after=5
             )
             return 
+
+        
         
         if self.testing:
             (self.match.radiant, self.match.dire) = await get_random_teams(interaction.guild)
         else:
             self.match.radiant = [member.name for member in self.match.radiant_channel.members]
             self.match.dire = [member.name for member in self.match.dire_channel.members]
+
+        # Assign role "Inhouse enjoyer" to all players
+        guild = interaction.guild
+        role = discord.utils.get(guild.roles, name="Inhouse enjoyer")
+        if not role:
+            role = await guild.create_role(name="Inhouse enjoyer")
+        
+        for member in self.match.radiant:
+            await member.add_roles(role)
+        for member in self.match.dire:
+            await member.add_roles(role)
+
 
         embed = discord.Embed( color=discord.Color.dark_red(), title="Currently playing")
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
