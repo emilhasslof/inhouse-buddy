@@ -4,7 +4,6 @@ from os import path
 from Commands.stats import stats_command
 from Commands.inhouse import inhouse_command
 from Commands.schedule import schedule_command
-from Commands.inhouse_enjoyer import inhouse_enjoyer_command
 
 
 if __name__ == "__main__":
