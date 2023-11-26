@@ -4,9 +4,11 @@ import random
 from Views.LockedMatch import LockedMatch
 
 class CreateMatch(discord.ui.View):
-    def __init__(self, *, match, testing=False):
+    def __init__(self, *, match, testing=False, scheduled_players=None, scheduled_queue=None):
         self.match = match
         self.testing = testing
+        scheduled_players = scheduled_players
+        scheduled_queue = scheduled_queue
         super().__init__(timeout=None)
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)

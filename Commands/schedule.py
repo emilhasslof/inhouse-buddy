@@ -38,6 +38,7 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
             )
             return
 
+    # Displaying scheduled matches
     scheduled_matches_datetimes = db_handler.get_scheduled_matches()
     if len(scheduled_matches_datetimes) == 0:
         await interaction.response.send_message(
@@ -52,15 +53,20 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
         return
     for idx, datetime_string in enumerate(scheduled_matches_datetimes):
         players = db_handler.get_players_signed_up(datetime_string)
+        queue = db_handler.get_queue(datetime_string)
 
-        embed=discord.Embed(
+        #testing
+        print(f"Sending message. Players: {players}, Time: {datetime_string}")
+
+        embed = discord.Embed(
             color=discord.Color.dark_red(),
             title=f"Match scheduled for {datetime_string}",
-            description="Players: \n " + "\n ".join(players))
-        view=ScheduledMatch(datetime_string=datetime_string, players=players, guild_id=interaction.guild_id
-                            , db_handler=db_handler)
+            description="Players: \n " + "\n ".join(players) + ("\n\nQueue: \n " + "\n ".join(queue) if queue else "")
+        )
+        view = ScheduledMatch(datetime_string=datetime_string, guild_id=interaction.guild_id , db_handler=db_handler)
+
         if idx == 0:
-            await interaction.response.send_message(embed=embed, view=view, delete_after=600)
+            await interaction.response.send_message(embed=embed, view=view, delete_after=6000)
         else:
-            await channel.send(embed=embed, view=view, delete_after=600) 
+            await channel.send(embed=embed, view=view, delete_after=6000) 
     return
