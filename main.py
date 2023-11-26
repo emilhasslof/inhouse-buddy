@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     @tree.command(guilds=list_of_guilds, name="inhouse-stats", description="Show inhouse statistics")
     async def stats(interaction):
-        await stats_command(interaction, timeout=60) 
+        await stats_command(interaction, timeout=600) 
 
     # Dont move this, client.run is blocking forever and needs to at the bottom of the file
     with open("token.txt", "r") as file: 

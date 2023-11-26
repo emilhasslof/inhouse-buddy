@@ -1,11 +1,24 @@
 import tabulate
 import json
+import discord
 
 
 async def stats_command(interaction, timeout):
     stats_json = ""  
-    with open(f"{interaction.guild_id}.json", "r") as file: 
-        stats_json = "\n".join(file.readlines())
+    try:
+        with open(f"{interaction.guild_id}.json", "r") as file: 
+            stats_json = "\n".join(file.readlines())
+    except FileNotFoundError:
+        await interaction.response.send_message(
+            embed=discord.Embed(
+                color=discord.Color.dark_red(),
+                title="Error",
+                description="No stats available"
+            ),
+            delete_after=30,
+            ephemeral=True
+        )
+        return
     stats = json.loads(stats_json)
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
     header = list(players_ranked[0][1].keys())
