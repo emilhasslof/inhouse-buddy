@@ -38,9 +38,9 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
             await interaction.response.send_message(
                 embed=discord.Embed(
                     title=f"<@&{inhouse_enjoyer.id}>",
-                    description=f"Match scheduled for {match_datetime.strftime('%Y-%m-%d %H:%M')}! Sign up to secure your spot!")
-                    view=ScheduledMatch(datetime_string=match_datetime.strftime("%Y-%m-%d %H:%M"), guild_id=interaction.guild_id , db_handler=db_handler)
-            )
+                    description=f"Match scheduled for {match_datetime.strftime('%Y-%m-%d %H:%M')}! Sign up to secure your spot!"
+                ),
+                view=ScheduledMatch(datetime_string=match_datetime.strftime("%Y-%m-%d %H:%M"), guild_id=interaction.guild_id , db_handler=db_handler)
             )
         
 
