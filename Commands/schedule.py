@@ -35,7 +35,15 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
             match_datetime = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
             db_handler.schedule_match(match_datetime.strftime("%Y-%m-%d %H:%M"))
             # Announce match, mentioning @Inhouse enjoyers
-            await interaction.response.send_message(f"<@&{inhouse_enjoyer.id}> Match scheduled for {match_datetime.strftime('%Y-%m-%d %H:%M')}! Sign up to secure your spot!")
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    title=f"<@&{inhouse_enjoyer.id}>",
+                    description=f"Match scheduled for {match_datetime.strftime('%Y-%m-%d %H:%M')}! Sign up to secure your spot!")
+                    view=ScheduledMatch(datetime_string=match_datetime.strftime("%Y-%m-%d %H:%M"), guild_id=interaction.guild_id , db_handler=db_handler)
+            )
+            )
+        
+
         except ValueError:
             await interaction.response.send_message(
                 embed=discord.Embed(
@@ -79,6 +87,6 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
         if not interaction.response.is_done():
             await interaction.response.send_message(embed=embed, view=view)
         else:
-            await channel.send(embed=embed, view=view, delete_after=6000) 
+            await channel.send(embed=embed, view=view) 
 
     return
