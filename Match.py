@@ -7,10 +7,10 @@ class Match():
         self.radiant, self.dire, self.winners, self.losers = [], [], [], []
 
     # returns a list of users allowed to edit the match
-    def can_edit(self, interaction):
-        role = discord.utils.get(interaction.guild.roles, name="Inhouse Manager")
-        inhouse_managers = [member.name for member in role.members]
-        return interaction.user.name in self.radiant + self.dire + inhouse_managers or interaction.user.guild_permissions.administrator
+   # def can_edit(self, interaction):
+   #     role = discord.utils.get(interaction.guild.roles, name="Inhouse Manager")
+   #     inhouse_managers = [member.name for member in role.members]
+   #     return interaction.user.name in self.radiant + self.dire + inhouse_managers or interaction.user.guild_permissions.administrator
     
     async def cancel(self, interaction):
         await interaction.response.edit_message(delete_after=0.1)
