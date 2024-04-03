@@ -1,4 +1,5 @@
 token.txt
 .vscode
 *.json
+nohup.log
 __pycache__/
