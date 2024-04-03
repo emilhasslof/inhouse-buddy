@@ -1,3 +1,4 @@
 token.txt
 .vscode
+*.json
 __pycache__/
