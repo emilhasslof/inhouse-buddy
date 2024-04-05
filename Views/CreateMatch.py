@@ -13,21 +13,21 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-#        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
-#            await interaction.response.send_message(
-#                embed=discord.Embed(
-#                    color=discord.Color.dark_red(),
-#                    title="Error",
-#                    description="Please make sure both teams have 5 players",
-#                ),
-#                delete_after=5,
-#                ephemeral=True
-#            )
-#            return
+        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
+            await interaction.response.send_message(
+                embed=discord.Embed(
+                    color=discord.Color.dark_red(),
+                    title="Error",
+                    description="Please make sure both teams have 5 players",
+                ),
+                delete_after=5,
+                ephemeral=True
+            )
+            return
         
         
         #if self.testing:
-        #    (self.match.radiant, self.match.dire) = await get_random_teams(interaction.guild)
+        #(self.match.radiant, self.match.dire) = await get_random_teams(interaction.guild)
         self.match.radiant = [member.name for member in self.match.radiant_channel.members]
         self.match.dire = [member.name for member in self.match.dire_channel.members]
 
@@ -37,10 +37,10 @@ class CreateMatch(discord.ui.View):
         if not role:
             role = await guild.create_role(name="Inhouse enjoyer")
             print("Created role Inhouse enjoyer")
-        
+       
         for member in self.match.radiant_channel.members:
             print(member)
-            await member.add_roles(role)  # bug: member is a string, not a member object
+            await member.add_roles(role)  
         for member in self.match.dire_channel.members:
             await member.add_roles(role)
 
@@ -49,7 +49,10 @@ class CreateMatch(discord.ui.View):
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
-        await interaction.response.edit_message( view=LockedMatch(self.match), embed=embed) 
+        try:
+            await interaction.response.edit_message( view=LockedMatch(self.match), embed=embed) 
+        except discord.errors.NotFound:
+            await interaction.channel.send_message(embed=embed, view=LockedMatch(self.match))
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
