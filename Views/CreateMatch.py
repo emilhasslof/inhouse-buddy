@@ -20,7 +20,7 @@ class CreateMatch(discord.ui.View):
                     title="Error",
                     description="Please make sure both teams have 5 players",
                 ),
-                delete_after=5
+                delete_after=5,
                 ephemeral=True
             )
             #return 
