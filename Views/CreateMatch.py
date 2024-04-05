@@ -19,9 +19,9 @@ class CreateMatch(discord.ui.View):
                     color=discord.Color.dark_red(),
                     title="Error",
                     description="Please make sure both teams have 5 players",
-                    ephemeral=True
                 ),
                 delete_after=5
+                ephemeral=True
             )
             #return 
 
