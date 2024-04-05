@@ -13,18 +13,17 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
-            await interaction.response.send_message(
-                embed=discord.Embed(
-                    color=discord.Color.dark_red(),
-                    title="Error",
-                    description="Please make sure both teams have 5 players",
-                ),
-                delete_after=5,
-                ephemeral=True
-            )
-            #return 
-
+#        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
+#            await interaction.response.send_message(
+#                embed=discord.Embed(
+#                    color=discord.Color.dark_red(),
+#                    title="Error",
+#                    description="Please make sure both teams have 5 players",
+#                ),
+#                delete_after=5,
+#                ephemeral=True
+#            )
+#            return
         
         
         #if self.testing:
