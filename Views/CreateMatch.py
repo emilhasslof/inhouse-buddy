@@ -18,7 +18,8 @@ class CreateMatch(discord.ui.View):
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
                     title="Error",
-                    description="Please make sure both teams have 5 players"
+                    description="Please make sure both teams have 5 players",
+                    ephemeral=True
                 ),
                 delete_after=5
             )
