@@ -22,7 +22,7 @@ class CreateMatch(discord.ui.View):
                 ),
                 delete_after=5
             )
-            return 
+            #return 
 
         
         
