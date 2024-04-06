@@ -26,13 +26,44 @@ async def stats_command(interaction, timeout):
     rows = []
     rows_2 = []
     for i, (player, player_stats) in enumerate(players_ranked):
+        player_stats["winrate"] = str(round(player_stats["winrate"], 2) * 100) + "%"
         l = list(map(str, player_stats.values()))
+        print(l)
+        l[3] = l[3]
         l.insert(0, player)
         if(i < 20):
             rows.append(l)
         else:
             rows_2.append(l)
-    
-    await interaction.response.send_message(f"```{tabulate.tabulate(rows, header)}```", delete_after=timeout)
+    await interaction.response.send_message(f"```{tabulate.tabulate(rows, headers=header, stralign='left', numalign='left')}```", delete_after=timeout)
     if rows_2:
-        await interaction.channel.send(f"```{tabulate.tabulate(rows_2, header)}```", delete_after=timeout)
+        await interaction.response.send_message(f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', numalign='left')}```", delete_after=timeout)
+'''
+Example of stats.json:
+{
+    "__hackerman": {
+        "wins": 2,
+        "losses": 1,
+        "matches": 3,
+        "winrate": 0.667,
+        "points": 1,
+        "rank": 1
+    },
+    "lackosia": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 1,
+        "winrate": 0.0,
+        "points": -1,
+        "rank": 2
+    },
+    "roggan.": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 1,
+        "winrate": 0.0,
+        "points": -1,
+        "rank": 2
+    }
+}
+'''
