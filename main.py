@@ -17,7 +17,7 @@ if __name__ == "__main__":
     wew=discord.Object(id=745215730592645221)
     list_of_guilds = [snuslan, wew]
 
-    testing = False 
+    testing = True 
 
     @client.event
     async def on_ready():

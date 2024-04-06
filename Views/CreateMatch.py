@@ -13,7 +13,9 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if not (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5) and not self.testing: 
+
+        if not self.testing and not \
+            (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5): 
             await interaction.response.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
@@ -24,12 +26,6 @@ class CreateMatch(discord.ui.View):
                 ephemeral=True
             )
             return
-        
-        
-        #if self.testing:
-        #(self.match.radiant, self.match.dire) = await get_random_teams(interaction.guild)
-        self.match.radiant = [member.name for member in self.match.radiant_channel.members]
-        self.match.dire = [member.name for member in self.match.dire_channel.members]
 
         # Assign role "Inhouse enjoyer" to all players
         guild = interaction.guild
@@ -37,22 +33,25 @@ class CreateMatch(discord.ui.View):
         if not role:
             role = await guild.create_role(name="Inhouse enjoyer")
             print("Created role Inhouse enjoyer")
-       
+
         for member in self.match.radiant_channel.members:
             print(member)
-            await member.add_roles(role)  
+            await member.add_roles(role)
         for member in self.match.dire_channel.members:
             await member.add_roles(role)
-
-
+       
+        self.match.radiant = [member.name for member in self.match.radiant_channel.members]
+        self.match.dire = [member.name for member in self.match.dire_channel.members]
         embed = discord.Embed( color=discord.Color.dark_red(), title="Currently playing")
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
         try:
             await interaction.response.edit_message( view=LockedMatch(self.match), embed=embed) 
-        except discord.errors.NotFound:
-            await interaction.channel.send_message(embed=embed, view=LockedMatch(self.match))
+        except Exception:
+            await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
+            await interaction.response.edit_message(delete_after=1)
+
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -61,9 +60,9 @@ class CreateMatch(discord.ui.View):
 # For testing purposes
 async def get_random_teams(guild):
     members = []
-    async for member in guild.fetch_members(limit=20):
+    async for member in guild.fetch_members(limit=10):
         members.append(member)
     random.shuffle(members)
-    radiant = [member.name for member in members[:5]]
-    dire = [member.name for member in members[5:10]] 
+    radiant = [member.name for member in members]
+    dire = [member.name for member in members] 
     return (radiant, dire)
