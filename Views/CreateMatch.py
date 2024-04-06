@@ -13,6 +13,7 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
+        print(interaction.type)
 
         if not self.testing and not \
             (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5): 
@@ -46,11 +47,22 @@ class CreateMatch(discord.ui.View):
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
+        await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
+        
+        # Try deleting the lock teams message
         try:
-            await interaction.response.edit_message( view=LockedMatch(self.match), embed=embed) 
-        except Exception:
-            await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
-            await interaction.response.edit_message(delete_after=1)
+            await interaction.message.delete()
+        except discord.errors.NotFound:
+            await interaction.channel.send(
+                embed=discord.Embed(
+                    title="NotFound exception",
+                    description="bot is little bit fuk but it's being investigated",
+                    color=discord.Color.dark_red()
+                ),
+                ephemeral=True,
+                delete_after=10
+            )
+
 
 
     @discord.ui.button(label="Cancel Match", style=discord.ButtonStyle.danger)
