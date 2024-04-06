@@ -4,9 +4,19 @@ from os import path
 from Commands.stats import stats_command
 from Commands.inhouse import inhouse_command
 from Commands.schedule import schedule_command
+import logging
+import sys
+
 
 
 if __name__ == "__main__":
+    # Redirect logging to stdout
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s', \
+                                           datefmt='%Y-%m-%d %H:%M:%S'))
+    logger.addHandler(handler)
 
     intents = discord.Intents.default()
     intents.members = True
