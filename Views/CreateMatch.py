@@ -13,7 +13,7 @@ class CreateMatch(discord.ui.View):
 
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
-        print(interaction.type)
+        #print(interaction.type) => IntractionType.component
 
         if not self.testing and not \
             (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5): 
@@ -36,7 +36,6 @@ class CreateMatch(discord.ui.View):
             print("Created role Inhouse enjoyer")
 
         for member in self.match.radiant_channel.members:
-            print(member)
             await member.add_roles(role)
         for member in self.match.dire_channel.members:
             await member.add_roles(role)
