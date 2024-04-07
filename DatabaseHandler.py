@@ -36,7 +36,7 @@ class DatabaseHandler:
         self.conn.commit()
     
     def get_scheduled_matches(self):
-        self.c.execute("SELECT * FROM scheduled_matches")
+        self.c.execute("SELECT * FROM scheduled_matches ORDER BY datetime")
         return [match[0] for match in self.c.fetchall()]
     
     def get_players_signed_up(self, datetime_string):
