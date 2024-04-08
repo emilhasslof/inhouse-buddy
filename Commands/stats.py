@@ -26,7 +26,7 @@ async def stats_command(interaction, timeout):
     rows = []
     rows_2 = []
     for i, (player, player_stats) in enumerate(players_ranked):
-        player_stats["winrate"] = str(round(player_stats["winrate"], 2) * 100) + "%"
+        player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 2)) + "%"
         l = list(map(str, player_stats.values()))
         l[3] = l[3]
         l.insert(0, player)
