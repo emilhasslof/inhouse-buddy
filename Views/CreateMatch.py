@@ -14,6 +14,7 @@ class CreateMatch(discord.ui.View):
     @discord.ui.button(label="Lock teams & start", style=discord.ButtonStyle.success)
     async def lock_and_start(self, interaction: discord.Interaction, button: discord.ui.Button):
         #print(interaction.type) => IntractionType.component
+        message_id = interaction.message.id
         await interaction.response.defer()
 
         if not self.testing and not \
@@ -48,7 +49,7 @@ class CreateMatch(discord.ui.View):
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
         try:
-            await interaction.followup.edit_message(embed=embed, view=LockedMatch(self.match))
+            await interaction.followup.edit_message(message_id = interaction.message.id, embed=embed, view=LockedMatch(self.match))
             print("Edit succesful, hooray!")
             return
         except discord.errors.NotFound:
