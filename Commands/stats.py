@@ -34,9 +34,11 @@ async def stats_command(interaction, timeout):
             rows.append(l)
         else:
             rows_2.append(l)
-    await interaction.response.send_message(f"```{tabulate.tabulate(rows, headers=header, stralign='left', numalign='left')}```", delete_after=timeout)
+    await interaction.response.send_message( \
+        f"```{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
-        await interaction.response.send_message(f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', numalign='left')}```", delete_after=timeout)
+        await interaction.response.send_message( \
+            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
 '''
 Example of stats.json:
 {
