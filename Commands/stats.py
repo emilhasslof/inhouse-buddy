@@ -27,18 +27,19 @@ async def stats_command(interaction, timeout):
     rows_2 = []
     for i, (player, player_stats) in enumerate(players_ranked):
         player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 2)) + "%"
+        rank_name = f"{player_stats['rank']}. {player}"
+        del player_stats['rank']
         l = list(map(str, player_stats.values()))
-        l[3] = l[3]
-        l.insert(0, player)
+        l.insert(0, rank_name)
         if(i < 20):
             rows.append(l)
         else:
             rows_2.append(l)
     await interaction.response.send_message( \
-        f"```{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+        f"```{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
         await interaction.response.send_message( \
-            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
 '''
 Example of stats.json:
 {
