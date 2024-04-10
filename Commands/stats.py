@@ -28,9 +28,9 @@ async def stats_command(interaction, timeout):
     for i, (player, player_stats) in enumerate(players_ranked):
         player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 2)) + "%"
         if player_stats['rank'] >= 10:
-            rank_name = f"{player_stats['rank']}.  {player}"
-        else:
             rank_name = f"{player_stats['rank']}. {player}"
+        else:
+            rank_name = f"{player_stats['rank']}.  {player}"
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
