@@ -12,7 +12,7 @@ class Match():
         if role:
             inhouse_managers = [member.name for member in role.members]
         return interaction.user.name in self.radiant + self.dire + inhouse_managers or interaction.user.guild_permissions.administrator
-    
+
     async def cancel(self, interaction):
         await interaction.response.edit_message(delete_after=0.1)
         await self.dire_channel.delete()
