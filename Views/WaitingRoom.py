@@ -4,6 +4,7 @@ class WaitingRoom(discord.ui.View):
     players = []
 
     def __init__(self, founder: str):
+        self.players = []
         self.players.append(founder)
         super().__init__()
     
