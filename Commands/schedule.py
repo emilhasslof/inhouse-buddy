@@ -1,6 +1,7 @@
 import discord
 import sqlite3
 from Views.ScheduledMatch import ScheduledMatch
+from Views.WaitingRoom import WaitingRoom
 from datetime import datetime, timedelta
 from DatabaseHandler import DatabaseHandler
 
@@ -57,6 +58,19 @@ async def schedule_command(interaction, date: str = "", time: str = ""):
                 ephemeral=True
             )
             return
+    else:
+        embed=discord.Embed(
+            color=discord.Color.dark_red(),
+            title=f"{interaction.user.name} calls to action!",
+            description=f"<@&{inhouse_enjoyer.id}> Join the waiting room if you're down to clown"
+        )
+        await interaction.response.send_message(view=WaitingRoom(founder=interaction.user.name) , embed=embed)
+
+        return
+                
+                
+        
+
     
 
     # test mentioning

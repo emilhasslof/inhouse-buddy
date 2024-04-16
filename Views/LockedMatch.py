@@ -105,7 +105,7 @@ def submit_match_result(*, guild_id, winners, losers):
         stats[player]["wins"] += 1
         stats[player]["points"] += 1
         stats[player]["matches"] += 1
-        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 3)
+        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 2)
 
     for player in losers:
         if player not in stats: 
@@ -113,7 +113,7 @@ def submit_match_result(*, guild_id, winners, losers):
         stats[player]["losses"] += 1
         stats[player]["points"] -= 1
         stats[player]["matches"] += 1
-        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 3)
+        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 2)
 
     # Sort players by points and update ranking
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
