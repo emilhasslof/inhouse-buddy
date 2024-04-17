@@ -19,7 +19,7 @@ async def inhouse_command(interaction: discord.Interaction, testing = False):
     )
     embed.set_thumbnail(url="https://cdn0.iconfinder.com/data/icons/sports-elements-2/24/Swords-512.png")
     await interaction.response.send_message(
-        view=CreateMatch(match=match, testing=testing),
+        view=CreateMatch(match=match, testing=testing, parent_embed=embed),
         embed=embed
     )
 

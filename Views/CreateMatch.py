@@ -4,9 +4,10 @@ import random
 from Views.LockedMatch import LockedMatch
 
 class CreateMatch(discord.ui.View):
-    def __init__(self, *, match, testing=False, scheduled_players=None, scheduled_queue=None):
+    def __init__(self, *, match, testing=False, scheduled_players=None, scheduled_queue=None, parent_embed=None):
         self.match = match
         self.testing = testing
+        self.parent_embed=parent_embed
         scheduled_players = scheduled_players
         scheduled_queue = scheduled_queue
         super().__init__(timeout=None)
@@ -16,10 +17,12 @@ class CreateMatch(discord.ui.View):
         #print(interaction.type) => IntractionType.component
         message_id = interaction.message.id
         await interaction.response.defer()
+        button.disabled = True
+        await interaction.followup.edit_message(interaction.message.id, view=self, embed=self.parent_embed)
 
         if not self.testing and not \
             (len(self.match.radiant_channel.members) == 5 and len(self.match.dire_channel.members) == 5): 
-            await interaction.response.send_message(
+            await interaction.followup.send_message(
                 embed=discord.Embed(
                     color=discord.Color.dark_red(),
                     title="Error",
@@ -48,12 +51,7 @@ class CreateMatch(discord.ui.View):
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
-        try:
-            await interaction.followup.edit_message(message_id = interaction.message.id, embed=embed, view=LockedMatch(self.match))
-            print("Edit succesful, hooray!")
-            return
-        except discord.errors.NotFound:
-            await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
+        await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
         
         # Try deleting the lock teams message
         try:
