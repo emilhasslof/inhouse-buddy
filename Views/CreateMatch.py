@@ -61,7 +61,6 @@ class CreateMatch(discord.ui.View):
         # Try deleting the lock teams message
         try:
             await interaction.message.delete()
-            await interaction.response.edit_message(content="Match started!", view=None)
         except discord.errors.NotFound:
             await interaction.channel.send(
                 embed=discord.Embed(
