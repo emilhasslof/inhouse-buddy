@@ -1,5 +1,6 @@
 import discord
 from discord import app_commands
+from datetime import datetime
 import random
 from Views.LockedMatch import LockedMatch
 
@@ -45,13 +46,17 @@ class CreateMatch(discord.ui.View):
         for member in self.match.dire_channel.members:
             await member.add_roles(role)
        
+        before = datetime.now()
         self.match.radiant = [member.name for member in self.match.radiant_channel.members]
         self.match.dire = [member.name for member in self.match.dire_channel.members]
-        embed = discord.Embed( color=discord.Color.dark_red(), title="Currently playing")
+        print(f"time to fetch member names was: {datetime.now() - before}")
+        embed = discord.Embed(color=discord.Color.dark_red(), title="Currently playing")
         embed.add_field( name="Radiant", value="\n".join(self.match.radiant))
         embed.add_field( name="Dire", value="\n".join(self.match.dire))
         embed.set_footer(text="Who won?")
+        before = datetime.now()
         await interaction.channel.send(embed=embed, view=LockedMatch(self.match))
+        print(f"Teams locked, time to send: {datetime.now() - before}")
         
         # Try deleting the lock teams message
         try:
