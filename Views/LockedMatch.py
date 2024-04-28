@@ -15,6 +15,7 @@ class LockedMatch(discord.ui.View):
             self.match.losers=self.match.dire
             embed = interaction.message.embeds[0]
             embed.set_footer(text="This will update stats, please confirm")
+            embed.set_footer(text=f"RADIANT WON, please confirm")
             await interaction.response.edit_message(
                 embed=embed,
                 view=Confirm(self.match)
@@ -28,7 +29,7 @@ class LockedMatch(discord.ui.View):
             self.match.winners=self.match.dire
             self.match.losers=self.match.radiant
             embed = interaction.message.embeds[0]
-            embed.set_footer(text="This will update stats, please confirm")
+            embed.set_footer(text=f"DIRE WON, please confirm")
             await interaction.response.edit_message(
                 embed=embed,
                 view=Confirm(self.match)
