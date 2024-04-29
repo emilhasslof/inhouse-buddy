@@ -1,10 +1,6 @@
 from os import path
 import json
 
-
-
-
-
 def add_win(*, players, stats):
     for player in players:
         stats[player]["wins"] += 1
@@ -27,7 +23,7 @@ def subtract_loss(*, players, stats):
 
 
 def calculate_stats(stats):
-    total_matches = sum(stats[player]["matches"] for player in stats.items()) / 10
+    total_matches = sum([stats[player]["matches"] for player in stats]) / 10
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
     prev_points = None
     prev_rank = None
@@ -40,10 +36,12 @@ def calculate_stats(stats):
         prev_points = stats[player]["points"]
         prev_rank = stats[player]["rank"]
 
+        stats[player]["matches"] = stats[player]["wins"] + stats[player]["losses"]
+
         if stats[player]["matches"] == 0:
             stats[player]["winrate"] = 0
         else:
-            stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 2)
+            stats[player]["winrate"] = stats[player]["wins"] / stats[player]["matches"]
 
 
         stats[player]["points"] = stats[player]["wins"] - stats[player]["losses"]

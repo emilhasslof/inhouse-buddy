@@ -1,7 +1,7 @@
 import discord
 from os import path
 import json
-from utils import add_win, add_win, subtract_win, subtract_loss, calculate_stats
+from utils import add_win, add_loss, subtract_win, subtract_loss, calculate_stats
 
 
 class LockedMatch(discord.ui.View):

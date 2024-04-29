@@ -1,6 +1,7 @@
 import tabulate
 import json
 import discord
+from utils import calculate_stats
 
 
 async def stats_command(interaction, timeout):
@@ -20,13 +21,17 @@ async def stats_command(interaction, timeout):
         )
         return
     stats = json.loads(stats_json)
+    calculate_stats(stats)
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
-    header = list(players_ranked[0][1].keys())
+    total_matches = sum([stats[player]["matches"] for player in stats]) / 10
+    header = list(players_ranked[0][1].keys()) 
     header.insert(0, "name")
+    del header[6]
     rows = []
     rows_2 = []
     for i, (player, player_stats) in enumerate(players_ranked):
-        player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 2)) + "%"
+        player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 1)) + "%"
+        player_stats["participation"] = str(round(player_stats["participation"] * 100, 1)) + "%"
         if player_stats['rank'] >= 10:
             rank_name = f"{player_stats['rank']}. {player}"
         else:
@@ -34,15 +39,15 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
-        if(i < 20):
+        if(i < 15):
             rows.append(l)
         else:
             rows_2.append(l)
-    await interaction.response.send_message( \
-        f"```{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+
+    await interaction.response.send_message(f"```stats from {total_matches} matches:\n\n{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
         await interaction.channel.send( \
-            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
 '''
 Example of stats.json:
 {
