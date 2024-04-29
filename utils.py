@@ -27,6 +27,7 @@ def subtract_loss(*, players, stats):
 
 
 def calculate_stats(stats):
+    total_matches = sum(stats[player]["matches"] for player in stats.items()) / 10
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
     prev_points = None
     prev_rank = None
@@ -47,4 +48,5 @@ def calculate_stats(stats):
 
         stats[player]["points"] = stats[player]["wins"] - stats[player]["losses"]
 
+        stats[player]["participation"] = stats[player]["matches"] / total_matches
 

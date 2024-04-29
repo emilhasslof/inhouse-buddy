@@ -1,7 +1,7 @@
 import discord
 from os import path
 import json
-from utils import add_win, add_win, subtract_win, subtract_loss
+from utils import add_win, add_win, subtract_win, subtract_loss, calculate_stats
 
 
 class LockedMatch(discord.ui.View):
@@ -103,33 +103,17 @@ def submit_match_result(*, guild_id, winners, losers):
 
     for player in winners:
         if player not in stats: 
-            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0}
-        stats[player]["wins"] += 1
-        stats[player]["points"] += 1
-        stats[player]["matches"] += 1
-        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 2)
+            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
+
 
     for player in losers:
         if player not in stats: 
-            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0}
-        stats[player]["losses"] += 1
-        stats[player]["points"] -= 1
-        stats[player]["matches"] += 1
-        stats[player]["winrate"] = round(stats[player]["wins"] / stats[player]["matches"], 2)
+            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
 
-    # Sort players by points and update ranking
-    players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
-    prev_points = None
-    prev_rank = None
-    for i, (player, _) in enumerate(players_ranked, start=1):
-        if stats[player]["points"] == prev_points:
-            stats[player]["rank"] = prev_rank
-        else: 
-            stats[player]["rank"] = i
-
-        prev_points = stats[player]["points"]
-        prev_rank = stats[player]["rank"]
-
+    add_win(players=winners, stats=stats)
+    add_loss(players=losers, stats=stats)
+    calculate_stats(stats=stats)
+    
     # Overwrite json with new stats
     stats_json = json.dumps(stats, indent=4)
     with open(f"{guild_id}.json", "w") as file:
