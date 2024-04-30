@@ -53,13 +53,13 @@ async def stats_command(interaction, timeout):
     await interaction.response.send_message(f"```stats from {total_matches} matches:\n\n{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
         await interaction.channel.send( \
-            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+            f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_3:
         await interaction.channel.send( \
-            f"```{tabulate.tabulate(rows_3, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+            f"```{tabulate.tabulate(rows_3, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_4:
         await interaction.channel.send( \
-            f"```{tabulate.tabulate(rows_4, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+            f"```{tabulate.tabulate(rows_4, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
 '''
 Example of stats.json:
 {
