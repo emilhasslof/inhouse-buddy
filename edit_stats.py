@@ -1,14 +1,14 @@
 from utils import *
 
 
-if path.exists(f"{guild_id}.json"):
+if path.exists(f"stats/{guild_id}.json"):
 
     snuslan_id="123169301094989825"
     wew_id="745215730592645221"
     guild_id = wew_id
 
     stats = {}
-    with open(f"{guild_id}.json", "r") as file: 
+    with open(f"stats/{guild_id}.json", "r") as file: 
         stats_json = "\n".join(file.readlines())
         stats = json.loads(stats_json)
                 
@@ -35,6 +35,6 @@ if path.exists(f"{guild_id}.json"):
         calculate_stats(stats)
 
     # Overwrite json with new stats
-    with open(f"{guild_id}.json", "w") as file:
+    with open(f"stats/{guild_id}.json", "w") as file:
         stats_json = json.dumps(stats, indent=4)
         file.writelines(stats_json)
