@@ -1,7 +1,6 @@
 *.db
 token.txt
 .vscode
-*.json
 nohup.log
 error.log
 __pycache__/
