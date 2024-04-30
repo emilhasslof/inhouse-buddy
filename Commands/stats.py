@@ -41,16 +41,16 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
-        if(i < 10):
+        if(i < 12):
             rows.append(l)
-        elif i < 20:
+        elif i < 12*2:
             rows_2.append(l)
-        elif i < 30:
+        elif i < 12*3:
             rows_3.append(l)
-        elif i < 40:
+        elif i < 12*4:
             rows_4.append(l)
 
-    await interaction.response.send_message(f"```stats from {total_matches} matches:\n\n{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+    await interaction.response.send_message(f"```stats from {total_matches} matches:\n\n{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
         await interaction.channel.send( \
             f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
