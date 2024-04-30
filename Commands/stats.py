@@ -39,7 +39,7 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
-        if(i < 15):
+        if(i < 13):
             rows.append(l)
         else:
             rows_2.append(l)
