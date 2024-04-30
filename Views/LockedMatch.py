@@ -2,6 +2,7 @@ import discord
 from os import path
 import json
 from utils import add_win, add_loss, subtract_win, subtract_loss, calculate_stats
+import time
 
 
 class LockedMatch(discord.ui.View):
@@ -96,8 +97,8 @@ class ConfirmCancel(discord.ui.View):
 # Update stats in "guild_id.json", unique file for each guild
 def submit_match_result(*, guild_id, winners, losers):
     stats = {}
-    if path.exists(f"{guild_id}.json"):
-        with open(f"{guild_id}.json", "r") as file: 
+    if path.exists(f"stats/{guild_id}.json"):
+        with open(f"stats/{guild_id}.json", "r") as file: 
             stats_json = "\n".join(file.readlines())
         stats = json.loads(stats_json)
 
@@ -116,5 +117,9 @@ def submit_match_result(*, guild_id, winners, losers):
     
     # Overwrite json with new stats
     stats_json = json.dumps(stats, indent=4)
-    with open(f"{guild_id}.json", "w") as file:
+    with open(f"stats/{guild_id}.json", "w") as file:
         file.writelines(stats_json)
+
+    with open(f"logs/{guild_id}.log", "a") as file:
+        file.write(f"{time.strftime('%Y-%m-%d %H:%M')} - Winners: {winners} Losers: {losers}\n")
+        file.write("\n")
