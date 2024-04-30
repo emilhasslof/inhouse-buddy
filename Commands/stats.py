@@ -7,7 +7,7 @@ from utils import calculate_stats
 async def stats_command(interaction, timeout):
     stats_json = ""  
     try:
-        with open(f"{interaction.guild_id}.json", "r") as file: 
+        with open(f"stats/{interaction.guild_id}.json", "r") as file: 
             stats_json = "\n".join(file.readlines())
     except FileNotFoundError:
         await interaction.response.send_message(
