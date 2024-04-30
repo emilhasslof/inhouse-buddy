@@ -1,8 +1,4 @@
-total matches
-participation %
-longest winstreak
-
-log all matches 
+winstreak
 
 ConfirmPlayersView when 5 players detected in each team channel
 

@@ -5,6 +5,17 @@ def add_win(*, players, stats):
     for player in players:
         stats[player]["wins"] += 1
 
+        if "winstreak" in stats[player]:
+            if stats[player]["winstreak"] > 0:
+                stats[player]["winstreak"] += 1
+            elif stats[player]["winstreak"] < 0:
+                stats[player]["winstreak"] = 1
+            elif stats[player]["winstreak"] == 0:
+                stats[player]["winstreak"] = 1
+        else: 
+            stats[player]["winstreak"] = 1
+            
+
 def subtract_win(*, players, stats):
     for player in players:
         stats[player]["wins"] = max(stats[player]["wins"] - 1, 0)
@@ -13,6 +24,16 @@ def add_loss(*, players, stats):
     for player in players:
         stats[player]["losses"] += 1
 
+        if "winstreak" in stats[player]:
+            if stats[player]["winstreak"] < 0:
+                stats[player]["winstreak"] -= 1
+            elif stats[player]["winstreak"] > 0:
+                stats[player]["winstreak"] = -1
+            elif stats[player]["winstreak"] == 0:
+                stats[player]["winstreak"] = -1
+        else:
+            stats[player]["winstreak"] = -1
+
 def subtract_loss(*, players, stats):
     for player in players:
         stats[player]["losses"] = max(stats[player]["losses"] - 1, 0)
@@ -20,7 +41,6 @@ def subtract_loss(*, players, stats):
 
 def calculate_stats(stats):
     for player in stats:
-        print(f"Calculating stats for {player}")
         stats[player]["points"] = stats[player]["wins"] - stats[player]["losses"]
         stats[player]["matches"] = stats[player]["wins"] + stats[player]["losses"]
         if stats[player]["matches"] == 0:
