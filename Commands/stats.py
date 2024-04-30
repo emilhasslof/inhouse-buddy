@@ -29,6 +29,8 @@ async def stats_command(interaction, timeout):
     del header[6]
     rows = []
     rows_2 = []
+    rows_3 = []
+    rows_4 = []
     for i, (player, player_stats) in enumerate(players_ranked):
         player_stats["winrate"] = str(round(player_stats["winrate"] * 100, 1)) + "%"
         player_stats["participation"] = str(round(player_stats["participation"] * 100, 1)) + "%"
@@ -39,15 +41,25 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
-        if(i < 13):
+        if(i < 10):
             rows.append(l)
-        else:
+        elif i < 20:
             rows_2.append(l)
+        elif i < 30:
+            rows_3.append(l)
+        elif i < 40:
+            rows_4.append(l)
 
     await interaction.response.send_message(f"```stats from {total_matches} matches:\n\n{tabulate.tabulate(rows, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
     if rows_2:
         await interaction.channel.send( \
             f"```{tabulate.tabulate(rows_2, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+    if rows_3:
+        await interaction.channel.send( \
+            f"```{tabulate.tabulate(rows_3, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
+    if rows_4:
+        await interaction.channel.send( \
+            f"```{tabulate.tabulate(rows_4, headers=header, stralign='left', tablefmt='rounded_outline', colalign=('left', 'right', 'right', 'right', 'right', 'right', 'right'))}```", delete_after=timeout)
 '''
 Example of stats.json:
 {
