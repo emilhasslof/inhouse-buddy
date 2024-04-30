@@ -47,6 +47,8 @@ def calculate_stats(stats):
             stats[player]["winrate"] = 0
         else:
             stats[player]["winrate"] = stats[player]["wins"] / stats[player]["matches"]
+        if "winstreak" not in stats[player]:
+            stats[player]["winstreak"] = 0
 
     total_matches = sum([stats[player]["matches"] for player in stats]) / 10
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
