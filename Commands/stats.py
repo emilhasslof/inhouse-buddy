@@ -48,7 +48,7 @@ async def stats_command(interaction, timeout):
         l.insert(0, rank_name)
         tmp = l[5]
         l[5] = l[7]
-        l[7] = tm
+        l[7] = tmp
 
         if(i < 12):
             rows.append(l)
