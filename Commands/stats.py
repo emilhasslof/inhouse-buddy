@@ -25,8 +25,13 @@ async def stats_command(interaction, timeout):
     players_ranked = sorted(stats.items(), key=lambda x: x[1]["points"], reverse=True)
     total_matches = sum([stats[player]["matches"] for player in stats]) / 10
     header = list(players_ranked[0][1].keys()) 
+
     header.insert(0, "name")
     del header[6]
+    tmp = header[5]
+    header[5] = header[7]
+    header[7] = tmp
+
     rows = []
     rows_2 = []
     rows_3 = []
@@ -41,6 +46,10 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
+        tmp = l[5]
+        l[5] = l[7]
+        l[7] = tm
+
         if(i < 12):
             rows.append(l)
         elif i < 12*2:
