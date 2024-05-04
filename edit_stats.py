@@ -15,21 +15,21 @@ if path.exists(f"stats/{guild_id}.json"):
 
         # add win, subtract loss
         #radiant = ["slyver123", "jakob7121", "cricket9584", "jockwe", "mandelmans"]
-        radiant = ["lackosia", "cricket9584", "moulbaert1", "slyver123", "roggan."]
+        #radiant = ["lackosia", "cricket9584", "moulbaert1", "slyver123", "roggan."]
+        winners = ['lackosia', 'benkebonk', 'jockwe', 'jakob7121', 'kingo.1337']
+        losers = ['deeeeer', 'cricket9584', 'jointzart', 'slyver123', 'sku6808']
 
         # subtract win, add loss
         #dire = ["kingo.1337", ".skiipa", "sku6808", "lackosia", "jointzart"] 
-        dire = [".skiipa", "sku6808", "deeeeer", "__hackerman", "jointzart"]
+        #dire = [".skiipa", "sku6808", "deeeeer", "__hackerman", "jointzart"]
 
         for player in radiant + dire:
             if player not in stats: 
                 print(f"warning, {player} was not found in stats")
                 stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
 
-        players = []
-        #add_win(players=dire, stats=stats)
-        #add_loss(players=radiant, stats=stats)
-        #subtract_loss(guild_id=guild_id, players=players, stats=stats)
+        subtract_win(guild_id=guild_id, players=winners, stats=stats)
+        subtract_loss(guild_id=guild_id, players=losers, stats=stats)
 
 
         # update score, winrate, rank
