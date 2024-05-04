@@ -1,11 +1,11 @@
 from utils import *
 
+snuslan_id="123169301094989825"
+wew_id="745215730592645221"
+guild_id = wew_id
 
 if path.exists(f"stats/{guild_id}.json"):
 
-    snuslan_id="123169301094989825"
-    wew_id="745215730592645221"
-    guild_id = wew_id
 
     stats = {}
     with open(f"stats/{guild_id}.json", "r") as file: 
@@ -15,11 +15,11 @@ if path.exists(f"stats/{guild_id}.json"):
 
         # add win, subtract loss
         #radiant = ["slyver123", "jakob7121", "cricket9584", "jockwe", "mandelmans"]
-        radiant = []
+        radiant = ["lackosia", "cricket9584", "moulbaert1", "slyver123", "roggan."]
 
         # subtract win, add loss
         #dire = ["kingo.1337", ".skiipa", "sku6808", "lackosia", "jointzart"] 
-        dire = []
+        dire = [".skiipa", "sku6808", "deeeeer", "__hackerman", "jointzart"]
 
         for player in radiant + dire:
             if player not in stats: 
@@ -27,7 +27,8 @@ if path.exists(f"stats/{guild_id}.json"):
                 stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
 
         players = []
-        #add_win(guild_id=guild_id, players=players, stats=stats)
+        #add_win(players=dire, stats=stats)
+        #add_loss(players=radiant, stats=stats)
         #subtract_loss(guild_id=guild_id, players=players, stats=stats)
 
 
