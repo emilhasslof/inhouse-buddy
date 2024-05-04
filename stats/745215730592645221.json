@@ -246,8 +246,8 @@
         "winrate": 0.0,
         "points": -1,
         "rank": 14,
-        "participation": 0.010526315789473684,
-        "winstreak": -1
+        "winstreak": -1,
+        "participation": 0.010526315789473684
     },
     "imkreden": {
         "wins": 0,
@@ -256,8 +256,8 @@
         "winrate": 0.0,
         "points": -1,
         "rank": 14,
-        "participation": 0.010526315789473684,
-        "winstreak": -1
+        "winstreak": -1,
+        "participation": 0.010526315789473684
     },
     "albintina": {
         "wins": 3,
@@ -266,7 +266,7 @@
         "winrate": 1.0,
         "points": 3,
         "rank": 9,
-        "participation": 0.031578947368421054,
-        "winstreak": 3
+        "winstreak": 3,
+        "participation": 0.031578947368421054
     }
 }
