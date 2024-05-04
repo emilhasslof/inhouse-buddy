@@ -23,13 +23,9 @@ if path.exists(f"stats/{guild_id}.json"):
         #dire = ["kingo.1337", ".skiipa", "sku6808", "lackosia", "jointzart"] 
         #dire = [".skiipa", "sku6808", "deeeeer", "__hackerman", "jointzart"]
 
-        for player in radiant + dire:
-            if player not in stats: 
-                print(f"warning, {player} was not found in stats")
-                stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
 
-        subtract_win(guild_id=guild_id, players=winners, stats=stats)
-        subtract_loss(guild_id=guild_id, players=losers, stats=stats)
+        #subtract_win(players=winners, stats=stats)
+        #subtract_loss(players=losers, stats=stats)
 
 
         # update score, winrate, rank

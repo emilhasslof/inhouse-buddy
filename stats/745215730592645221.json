@@ -1,13 +1,13 @@
 {
     "lackosia": {
-        "wins": 43,
+        "wins": 42,
         "losses": 34,
-        "matches": 77,
-        "winrate": 0.5584415584415584,
-        "points": 9,
+        "matches": 76,
+        "winrate": 0.5526315789473685,
+        "points": 8,
         "rank": 3,
         "winstreak": 2,
-        "participation": 0.8020833333333334
+        "participation": 0.8
     },
     "pingeling.": {
         "wins": 7,
@@ -15,9 +15,9 @@
         "matches": 11,
         "winrate": 0.6363636363636364,
         "points": 3,
-        "rank": 10,
+        "rank": 9,
         "winstreak": 0,
-        "participation": 0.11458333333333333
+        "participation": 0.11578947368421053
     },
     "laktosia": {
         "wins": 4,
@@ -27,57 +27,57 @@
         "points": 0,
         "rank": 13,
         "winstreak": 0,
-        "participation": 0.08333333333333333
+        "participation": 0.08421052631578947
     },
     "sku6808": {
         "wins": 37,
-        "losses": 39,
-        "matches": 76,
-        "winrate": 0.4868421052631579,
-        "points": -2,
-        "rank": 18,
+        "losses": 38,
+        "matches": 75,
+        "winrate": 0.49333333333333335,
+        "points": -1,
+        "rank": 14,
         "winstreak": -3,
-        "participation": 0.7916666666666666
+        "participation": 0.7894736842105263
     },
     "deeeeer": {
         "wins": 28,
-        "losses": 15,
-        "matches": 43,
-        "winrate": 0.6511627906976745,
-        "points": 13,
+        "losses": 14,
+        "matches": 42,
+        "winrate": 0.6666666666666666,
+        "points": 14,
         "rank": 1,
         "winstreak": 1,
-        "participation": 0.4479166666666667
+        "participation": 0.4421052631578947
     },
     "slyver123": {
         "wins": 24,
-        "losses": 41,
-        "matches": 65,
-        "winrate": 0.36923076923076925,
-        "points": -17,
+        "losses": 40,
+        "matches": 64,
+        "winrate": 0.375,
+        "points": -16,
         "rank": 27,
         "winstreak": -2,
-        "participation": 0.6770833333333334
+        "participation": 0.6736842105263158
     },
     "jointzart": {
         "wins": 28,
-        "losses": 35,
-        "matches": 63,
-        "winrate": 0.4444444444444444,
-        "points": -7,
+        "losses": 34,
+        "matches": 62,
+        "winrate": 0.45161290322580644,
+        "points": -6,
         "rank": 23,
         "winstreak": -5,
-        "participation": 0.65625
+        "participation": 0.6526315789473685
     },
     "cricket9584": {
         "wins": 24,
-        "losses": 35,
-        "matches": 59,
-        "winrate": 0.4067796610169492,
-        "points": -11,
+        "losses": 34,
+        "matches": 58,
+        "winrate": 0.41379310344827586,
+        "points": -10,
         "rank": 25,
         "winstreak": -2,
-        "participation": 0.6145833333333334
+        "participation": 0.6105263157894737
     },
     "ottosson7254": {
         "wins": 32,
@@ -87,7 +87,7 @@
         "points": 6,
         "rank": 5,
         "winstreak": -1,
-        "participation": 0.6041666666666666
+        "participation": 0.6105263157894737
     },
     "tf147": {
         "wins": 23,
@@ -97,7 +97,7 @@
         "points": -8,
         "rank": 24,
         "winstreak": -3,
-        "participation": 0.5625
+        "participation": 0.5684210526315789
     },
     "fault9": {
         "wins": 9,
@@ -107,7 +107,7 @@
         "points": -3,
         "rank": 19,
         "winstreak": 0,
-        "participation": 0.21875
+        "participation": 0.22105263157894736
     },
     "mandelmans": {
         "wins": 13,
@@ -115,9 +115,9 @@
         "matches": 23,
         "winrate": 0.5652173913043478,
         "points": 3,
-        "rank": 10,
+        "rank": 9,
         "winstreak": 0,
-        "participation": 0.23958333333333334
+        "participation": 0.24210526315789474
     },
     "__hackerman": {
         "wins": 26,
@@ -127,7 +127,7 @@
         "points": -1,
         "rank": 14,
         "winstreak": 2,
-        "participation": 0.5520833333333334
+        "participation": 0.5578947368421052
     },
     ".skiipa": {
         "wins": 42,
@@ -135,9 +135,9 @@
         "matches": 71,
         "winrate": 0.5915492957746479,
         "points": 13,
-        "rank": 1,
+        "rank": 2,
         "winstreak": -1,
-        "participation": 0.7395833333333334
+        "participation": 0.7473684210526316
     },
     "roggan.": {
         "wins": 9,
@@ -147,17 +147,17 @@
         "points": -12,
         "rank": 26,
         "winstreak": -2,
-        "participation": 0.3125
+        "participation": 0.3157894736842105
     },
     "jockwe": {
-        "wins": 16,
+        "wins": 15,
         "losses": 20,
-        "matches": 36,
-        "winrate": 0.4444444444444444,
-        "points": -4,
-        "rank": 21,
+        "matches": 35,
+        "winrate": 0.42857142857142855,
+        "points": -5,
+        "rank": 22,
         "winstreak": 2,
-        "participation": 0.375
+        "participation": 0.3684210526315789
     },
     "alex9785": {
         "wins": 1,
@@ -167,27 +167,27 @@
         "points": -4,
         "rank": 21,
         "winstreak": 0,
-        "participation": 0.0625
+        "participation": 0.06315789473684211
     },
     "benkebonk": {
-        "wins": 16,
+        "wins": 15,
         "losses": 12,
-        "matches": 28,
-        "winrate": 0.5714285714285714,
-        "points": 4,
-        "rank": 8,
+        "matches": 27,
+        "winrate": 0.5555555555555556,
+        "points": 3,
+        "rank": 9,
         "winstreak": 2,
-        "participation": 0.2916666666666667
+        "participation": 0.28421052631578947
     },
     "jakob7121": {
-        "wins": 35,
+        "wins": 34,
         "losses": 27,
-        "matches": 62,
-        "winrate": 0.5645161290322581,
-        "points": 8,
+        "matches": 61,
+        "winrate": 0.5573770491803278,
+        "points": 7,
         "rank": 4,
         "winstreak": -1,
-        "participation": 0.6458333333333334
+        "participation": 0.6421052631578947
     },
     "moulbaert1": {
         "wins": 18,
@@ -195,9 +195,9 @@
         "matches": 31,
         "winrate": 0.5806451612903226,
         "points": 5,
-        "rank": 7,
+        "rank": 6,
         "winstreak": 1,
-        "participation": 0.3229166666666667
+        "participation": 0.3263157894736842
     },
     "moogi3086": {
         "wins": 2,
@@ -207,7 +207,7 @@
         "points": -3,
         "rank": 19,
         "winstreak": 0,
-        "participation": 0.07291666666666667
+        "participation": 0.07368421052631578
     },
     "harveyspecter": {
         "wins": 18,
@@ -217,17 +217,17 @@
         "points": 4,
         "rank": 8,
         "winstreak": -3,
-        "participation": 0.3333333333333333
+        "participation": 0.3368421052631579
     },
     "kingo.1337": {
-        "wins": 23,
+        "wins": 22,
         "losses": 17,
-        "matches": 40,
-        "winrate": 0.575,
-        "points": 6,
-        "rank": 5,
+        "matches": 39,
+        "winrate": 0.5641025641025641,
+        "points": 5,
+        "rank": 6,
         "winstreak": -1,
-        "participation": 0.4166666666666667
+        "participation": 0.4105263157894737
     },
     "snam1337": {
         "wins": 0,
@@ -237,7 +237,7 @@
         "points": -1,
         "rank": 14,
         "winstreak": 0,
-        "participation": 0.010416666666666666
+        "participation": 0.010526315789473684
     },
     "varianten": {
         "wins": 0,
@@ -246,7 +246,7 @@
         "winrate": 0.0,
         "points": -1,
         "rank": 14,
-        "participation": 0.010416666666666666,
+        "participation": 0.010526315789473684,
         "winstreak": -1
     },
     "imkreden": {
@@ -256,7 +256,7 @@
         "winrate": 0.0,
         "points": -1,
         "rank": 14,
-        "participation": 0.010416666666666666,
+        "participation": 0.010526315789473684,
         "winstreak": -1
     },
     "albintina": {
@@ -265,8 +265,8 @@
         "matches": 3,
         "winrate": 1.0,
         "points": 3,
-        "rank": 10,
-        "participation": 0.03125,
+        "rank": 9,
+        "participation": 0.031578947368421054,
         "winstreak": 3
     }
 }
