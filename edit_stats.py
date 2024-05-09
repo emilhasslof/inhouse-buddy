@@ -16,16 +16,20 @@ if path.exists(f"stats/{guild_id}.json"):
         # add win, subtract loss
         #radiant = ["slyver123", "jakob7121", "cricket9584", "jockwe", "mandelmans"]
         #radiant = ["lackosia", "cricket9584", "moulbaert1", "slyver123", "roggan."]
-        winners = ['lackosia', 'benkebonk', 'jockwe', 'jakob7121', 'kingo.1337']
-        losers = ['deeeeer', 'cricket9584', 'jointzart', 'slyver123', 'sku6808']
-
+        winners = ['.skiipa', 'ottosson7254', 'fault9', 'mandelmans', 'kingo.1337'] 
+        losers = ['sku6808', 'jockwe', 'cricket9584', 'lackosia', 'slyver123']
         # subtract win, add loss
         #dire = ["kingo.1337", ".skiipa", "sku6808", "lackosia", "jointzart"] 
         #dire = [".skiipa", "sku6808", "deeeeer", "__hackerman", "jointzart"]
 
 
-        #subtract_win(players=winners, stats=stats)
-        #subtract_loss(players=losers, stats=stats)
+        '''
+        subtract_win(players=winners, stats=stats)
+        add_loss(players=winners, stats=stats)
+
+        subtract_loss(players=losers, stats=stats)
+        add_win(players=losers, stats=stats)
+        '''
 
 
         # update score, winrate, rank
