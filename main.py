@@ -27,7 +27,7 @@ if __name__ == "__main__":
     wew=discord.Object(id=745215730592645221)
     list_of_guilds = [snuslan, wew]
 
-    testing = False
+    testing = True
 
     @client.event
     async def on_ready():
@@ -43,11 +43,12 @@ if __name__ == "__main__":
 
     @tree.command(guilds=list_of_guilds, name="inhouse", description="Prepare an inhouse match" )
     async def inhouse(interaction):
-        await inhouse_command(interaction, testing)
+        await inhouse_command(interaction, client, testing)
 
     @tree.command(guilds=list_of_guilds, name="inhouse-stats", description="Show inhouse statistics")
     async def stats(interaction):
         await stats_command(interaction, timeout=600) 
+
 
     # Dont move this, client.run is blocking forever and needs to at the bottom of the file
     with open("token.txt", "r") as file: 

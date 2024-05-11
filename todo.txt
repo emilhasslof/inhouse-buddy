@@ -1,4 +1,2 @@
-winstreak
-
 ConfirmPlayersView when 5 players detected in each team channel
 

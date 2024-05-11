@@ -2,7 +2,8 @@ import discord
 from Views.CreateMatch import CreateMatch
 from Match import Match
 
-async def inhouse_command(interaction: discord.Interaction, testing = False):
+async def inhouse_command(interaction: discord.Interaction, client: discord.Client, testing = False):
+    print(f"{client} from inhouse_command")
     category = interaction.channel.category
     if category:
         radiant_channel = await category.create_voice_channel(name="Radiant")
@@ -19,7 +20,7 @@ async def inhouse_command(interaction: discord.Interaction, testing = False):
     )
     embed.set_thumbnail(url="https://cdn0.iconfinder.com/data/icons/sports-elements-2/24/Swords-512.png")
     await interaction.response.send_message(
-        view=CreateMatch(match=match, testing=testing, parent_embed=embed),
+        view=CreateMatch(match=match, testing=testing, parent_embed=embed, client=client, interaction=interaction),
         embed=embed
     )
 
