@@ -104,12 +104,12 @@ def submit_match_result(*, guild_id, winners, losers):
 
     for player in winners:
         if player not in stats: 
-            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
+            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "participation": 0, "winstreak": 0, "rank": 0, "points": 0}
 
 
     for player in losers:
         if player not in stats: 
-            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "points": 0, "rank": 0, "participation": 0}
+            stats[player] = {"wins": 0, "losses": 0, "matches": 0, "winrate": 0, "participation": 0, "winstreak": 0, "rank": 0, "points": 0}
 
     add_win(players=winners, stats=stats)
     add_loss(players=losers, stats=stats)

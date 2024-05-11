@@ -27,10 +27,7 @@ async def stats_command(interaction, timeout):
     header = list(players_ranked[0][1].keys()) 
 
     header.insert(0, "name")
-    del header[6]
-    tmp = header[5]
-    header[5] = header[7]
-    header[7] = tmp
+    del header[7]
 
     rows = []
     rows_2 = []
@@ -46,9 +43,6 @@ async def stats_command(interaction, timeout):
         del player_stats['rank']
         l = list(map(str, player_stats.values()))
         l.insert(0, rank_name)
-        tmp = l[5]
-        l[5] = l[7]
-        l[7] = tmp
 
         if(i < 12):
             rows.append(l)
