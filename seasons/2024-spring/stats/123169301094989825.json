@@ -1,0 +1,90 @@
+{
+    "__hackerman": {
+        "wins": 2,
+        "losses": 0,
+        "matches": 2,
+        "winrate": 1.0,
+        "points": 2,
+        "rank": 1
+    },
+    "flyver123": {
+        "wins": 1,
+        "losses": 0,
+        "matches": 0,
+        "winrate": 0,
+        "points": 1,
+        "rank": 2
+    },
+    "jakob7121": {
+        "wins": 1,
+        "losses": 0,
+        "matches": 0,
+        "winrate": 0,
+        "points": 1,
+        "rank": 2
+    },
+    "cricket9584": {
+        "wins": 1,
+        "losses": 0,
+        "matches": 0,
+        "winrate": 0,
+        "points": 1,
+        "rank": 2
+    },
+    "jockwe": {
+        "wins": 1,
+        "losses": 0,
+        "matches": 0,
+        "winrate": 0,
+        "points": 1,
+        "rank": 2
+    },
+    "mandelmans": {
+        "wins": 1,
+        "losses": 0,
+        "matches": 0,
+        "winrate": 0,
+        "points": 1,
+        "rank": 2
+    },
+    "kingo.1337": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 0,
+        "winrate": 0,
+        "points": -1,
+        "rank": 2
+    },
+    ".skiipa": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 0,
+        "winrate": 0,
+        "points": -1,
+        "rank": 2
+    },
+    "sku6808": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 0,
+        "winrate": 0,
+        "points": -1,
+        "rank": 2
+    },
+    "lackosia": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 0,
+        "winrate": 0,
+        "points": -1,
+        "rank": 2
+    },
+    "jointzart": {
+        "wins": 0,
+        "losses": 1,
+        "matches": 0,
+        "winrate": 0,
+        "points": -1,
+        "rank": 2
+    }
+}
